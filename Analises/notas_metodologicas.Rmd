@@ -1,0 +1,133 @@
+---
+title: "Notas metodologicas"
+output: html_notebook
+---
+
+# PNADc
+
+## Sobre a visita a ser escolhida
+
+Como já discutido em outros momentos, optou-se por trabalhar com PNADc, em função de seus dados compilados anualmente em torno de suas visitas. Isso se deve ao fato de que os suplementos da pesquisa são coletados em momentos distintos do ano, de acordo com o número da respectiva visita no domicílio. No nosso caso, informações acerca do recebimento de aposentadoria são de suma relevância para se compreender os possíveis *percursos* pelos quais os idosos são motivados a buscar uma (re)inserção no mercado de trabalho.
+
+As análises da primeira e segunda etapa do artigo, com abrangência temporal entre 2012 e 2019, se valerão da **Visita 1**, uma vez que é o momento em que *Recebimentos de outras fontes* são inquiridos para toda a amplitude temporal de interesse. Para análise subsequente no contexto de Covid-19 -- variando em torno de 2020 e 2022 --, a **Visita 5** será preferida, uma vez que estudos técnicos da equipe do IBGE apontam para uma menor atrição da amostra na medida em que se aumentou a quantidade de visitas realizadas no respectivo domicílio.
+
+Vale notar, entretanto, que mudanças metodológicas ocorreram na forma de cálculo e coleta de algumas das variáveis utilizadas pela PNADc no que diz respeito aos seus dados de visitas. Essas mudanças se devem, tanto no modo de coleta de algumas informações quanto no modo de cálculo pripriamente dito de alguns indicadores. Entretanto, acredita-se que tais alterações não influenciarão as presentes análises.
+
+## Variáveis a serem criadas
+
+**Dimensão demográfica**
+
+- Idade [OK]
+
+  - Grupos etários quinquenais a partir dos 60 anos.
+
+**Dimensão domiciliar**
+
+- Existência de dependentes intradomiciliar sem renda
+
+  - (i) Dependentes jovens: abaixo de 14 anos. [revisar que tá demorando demais]
+  
+  - (ii) Dependentes idosos: acima dos 60 anos e que não tenha renda alguma. [revisar que tá demorando demais]
+  
+- Tipo de domicílio de residência [OK]
+
+- Parcela da renda do idoso na renda domiciliar [OK]
+
+**Dimensão socioeconômica**
+
+- Gênero/Sexo [OK]
+
+- Escolaridade atingida [OK]
+
+- Quintil de renda domiciliar per capita  [OK]
+
+**Benefícios e direitos**
+
+- Status de aposentadoria [OK]
+
+  - **ATENÇÃO!!** Tomar cuidado que é uma variável que está diferente nas bases de dados.
+
+**Padrão espacial**
+
+- Regiões geográficas [OK]
+
+- UFs [OK]
+
+- Status metropolitano (Urbano RM, Urbano não-RM, Rural) [OK]
+
+## Análises da Seção 1
+
+**OBJETIVO DA SEÇÃO**: Analisar os diferenciais por cor ou raça na participação dos idosos no mercado de trabalho brasileiro entre 2012 e 2019, segundo características socioeconômicas, demográficas e domiciliares.
+
+**MÉTRICAS UTILIZADAS**
+
+1. Descritivas da composição da população idosa por cor ou raça, segundo as diferentes características que afetam sua participação no mercado de trabalho.
+
+2. Taxa de Participação no Mercado de Trabalho (também chamada de Taxa de Atividade Econômica ou Taxa de Participação na Força de Trabalho)
+
+$$TPMT = \frac{PEA}{PIA}$$
+
+Em que, $PEA$ se refere à População Economicamente Ativa, sendo aquela população acima dos 10 anos de idade que estavam ocupadas ou procuravam por emprego no intervalo delimitado pela pesquisa em relação ao período de referência. A $PIA$, por seu turno, refere-se à população em idade ativa, isto é, aquela que estaria exposta à estar ocupada ou procurar por emprego no respectivo período de referência.
+
+Dada a heterogeneidade subjacente ao grupo populacional em idade ativa e seus diferentes fatores que podem afetar a intensidade com que a população está buscando por emprego ou ocupada (economicamente ativa), considera-se a $TPMT$ uma medida bruta. Desse modo, pretende-se desagregá-la por meio dos diferentes fatores de composição através de Taxas Específicas de Participação no Mercado de Trabalho $TEPMT$ para as características.
+
+### Análises da Descritiva da composição da população
+
+1. População idosa e não idosa (acima dos 10 anos) total e por cor ou raça entre 2012 e 2019.
+  
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+2. População idosa e não idosa (acima dos 10 anos) total e por cor ou raça entre 2012 e 2019 segundo condição de participação ou não no mercado de trabalho.
+  
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+3. População idosa por cor ou raça e total entre 2012 e 2019 por idade.
+
+  - Variação relativa da medida entre 2012 e 2019.
+    
+  - Por sexo.
+  
+4. População idosa por cor ou raça e total entre 2012 e 2019 por sexo.
+
+  - Variação relativa da medida entre 2012 e 2019.
+
+5. População idosa por cor ou raça e total entre 2012 e 2019 por escolaridade.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+6. População idosa por cor ou raça e total entre 2012 e 2019 por Posição da renda domiicliar per capita.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+7. População idosa por cor ou raça e total entre 2012 e 2019 por tipo de domicílio de residência.
+
+  - Variação relativa da medida entre 2012 e 2019.
+
+  - Por sexo.
+  
+8. População idosa por cor ou raça e total entre 2012 e 2019 por existência de dependente.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+9. População idosa por cor ou raça e total entre 2012 e 2019 por posição da renda do idoso na renda domiciliar, posicao da renda do idoso oriunda de aposentadoria na renda domiciliar e posicao da renda oriunda de aposentadoria na renda de todas as fontes.
+
+  - Variação relativa da medida entre 2012 e 2019.
+    
+  - Por sexo.
+
+10. População idosa por cor ou raça e total entre 2012 e 2019 por status de aposentadoria.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
