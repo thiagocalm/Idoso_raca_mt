@@ -11,8 +11,6 @@ ifelse(!require(survey),install.packages("survey"),require(survey))
 
 load("./Analises/outputs/pt1/descritivas_taxa.RData")
 
-
-
 # 1 - TAE por raca e status de idoso --------------------------------------
 
 # Total
@@ -31,10 +29,10 @@ descritivas_taxa$t1 |>
   scale_x_continuous(breaks = seq(2012,2019,1)) +
   scale_y_continuous(breaks = seq(15,80,10)) +
   labs(
-    title = "Taxa Bruta de Participação no Mercado de Trabalho por cor ou raça e se é idoso ou não - Brasil 2012-2019",
+    # title = "Taxa Bruta de Participação no Mercado de Trabalho por cor ou raça e se é idoso ou não - Brasil 2012-2019",
     x = "Ano Calendário",
     y = "Taxa Bruta de Participação no Mercado de Trabalho",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
@@ -103,10 +101,10 @@ descritivas_taxa$t2 |>
   scale_y_continuous(breaks = seq(0,80,10)) +
     lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Taxa Específica de Participação no Mercado de Trabalho idade, segundo cor ou raça - Brasil 2012-2019",
+    # title = "Taxa Específica de Participação no Mercado de Trabalho idade, segundo cor ou raça - Brasil 2012-2019",
     x = "Ano Calendário",
     y = "Taxa Específica de Participação no Mercado de Trabalho",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
@@ -176,10 +174,10 @@ descritivas_taxa$t3 |>
   scale_y_continuous(breaks = seq(0,80,10)) +
   lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Taxa Específica de Participação no Mercado de Trabalho por escolaridade atingida, segundo cor ou raça - Brasil 2012-2019",
+    # title = "Taxa Específica de Participação no Mercado de Trabalho por escolaridade atingida, segundo cor ou raça - Brasil 2012-2019",
     x = "Ano Calendário",
     y = "Taxa Específica de Participação no Mercado de Trabalho por escolaridade",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
@@ -256,7 +254,7 @@ descritivas_taxa$t4 |>
   labs(
     title = "Taxa Específica de Participação no Mercado de Trabalho por quintil de renda domiciliar per capita de todas as fontes, segundo cor ou raça - Brasil 2012-2019",
     x = "Ano Calendário",
-    y = "Taxa Específica de Participação no Mercado de Trabalho por quintil de renda domiciliar per capita",
+    y = "Taxa Específica de Participação no Mercado de Trabalho",
     caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
@@ -296,14 +294,14 @@ descritivas_taxa$t4_by_sex |>
   scale_y_continuous(breaks = seq(0,80,10)) +
   lemon::facet_rep_grid(sexo ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Taxa Específica de Participação no Mercado de Trabalho por quintil de renda domiciliar per capita de todas as fontes, segundo cor ou raça e sexo - Brasil 2012-2019",
+    # title = "Taxa Específica de Participação no Mercado de Trabalho por quintil de renda domiciliar per capita de todas as fontes,\n segundo cor ou raça e sexo - Brasil 2012-2019",
     x = "Ano Calendário",
-    y = "Taxa Específica de Participação no Mercado de Trabalho por quintil de renda domiciliar per capita",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    y = "Taxa Específica de Participação no Mercado de Trabalho",
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
-    plot.title = element_text(face = "bold", size = 14, color = "#525252"),
+    plot.title = element_text(face = "bold", size = 14, color = "#525252", hjust = .5),
     axis.title = element_text(size = 11, hjust = .5, color = "#525252"),
     strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
     strip.background = element_blank(),
@@ -417,14 +415,14 @@ descritivas_taxa$t6 |>
   scale_y_continuous(breaks = seq(0,80,10)) +
   lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Taxa Específica de Participação no Mercado de Trabalho por existência de dependente, segundo cor ou raça - Brasil 2012-2019",
+    # title = "Taxa Específica de Participação no Mercado de Trabalho por existência de dependente, \n segundo cor ou raça - Brasil 2012-2019",
     x = "Ano Calendário",
     y = "Taxa Específica de Participação no Mercado de Trabalho",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
-    plot.title = element_text(face = "bold", size = 14, color = "#525252"),
+    plot.title = element_text(face = "bold", size = 14, color = "#525252", hjust = .5),
     axis.title = element_text(size = 11, hjust = .5, color = "#525252"),
     strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
     strip.background = element_blank(),
@@ -474,7 +472,7 @@ descritivas_taxa$t6_by_sex |>
     legend.position = "top"
   )
 
-# 6 - TAE idoso por raca e aposentadoria ---------------------------------
+# 7 - TAE idoso por raca e aposentadoria ---------------------------------
 
 # Total
 
@@ -490,16 +488,17 @@ descritivas_taxa$t8 |>
   coord_cartesian(ylim = c(0,60)) +
   # scale_x_continuous(breaks = seq(2012,2019,1)) +
   scale_y_continuous(breaks = seq(0,80,10)) +
-  lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
+  # lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Taxa Específica de Participação no Mercado de Trabalho por status de aposentadoria, segundo cor ou raça - Brasil 2012-2019",
-    x = "Ano Calendário",
+    title = "(i)",
+    # title = "Taxa Específica de Participação no Mercado de Trabalho por status de aposentadoria, segundo cor ou raça - Brasil 2012-2019",
+    x = "Status de aposentado",
     y = "Taxa Específica de Participação no Mercado de Trabalho",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
-    plot.title = element_text(face = "bold", size = 14, color = "#525252"),
+    plot.title = element_text(face = "bold", size = 14, color = "#525252", hjust = .5),
     axis.title = element_text(size = 11, hjust = .5, color = "#525252"),
     strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
     strip.background = element_blank(),

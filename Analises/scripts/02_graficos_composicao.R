@@ -418,10 +418,10 @@ descritivas_composicao$t8 |>
   scale_y_continuous(breaks = seq(0,100,10)) +
   lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Distribuição relativa da população por existência de dependente, segundo cor ou raça - Brasil 2012-2019",
+    # title = "Distribuição relativa da população por existência de dependente, segundo cor ou raça - Brasil 2012-2019",
     x = "Existência de dependentes",
     y = "População (%)",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
@@ -499,14 +499,15 @@ descritivas_composicao$t10 |>
   scale_y_continuous(breaks = seq(0,max(descritivas_composicao$t10$prop)+10,10)) +
   lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Distribuição relativa da população por status de aposentadoria, segundo cor ou raça - Brasil 2012-2019",
+    title = "(ii)",
+    # title = "Distribuição relativa da população por status de aposentadoria, segundo cor ou raça - Brasil 2012-2019",
     x = "Status de aposentadoria",
     y = "População (%)",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
-    plot.title = element_text(face = "bold", size = 14, color = "#525252"),
+    plot.title = element_text(face = "bold", size = 14, color = "#525252", hjust = .5),
     axis.title = element_text(size = 11, hjust = .5, color = "#525252"),
     strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
     strip.background = element_blank(),
@@ -577,10 +578,11 @@ pnad_idoso |>
   scale_fill_viridis_d(option = "D",begin = .2, end = .6) +
   scale_x_continuous(breaks = seq(0,100,10)) +
   labs(
+    # title = "(i)",
     title = "Distribuição de densidade da população por parcela da contribuição da renda do idoso na renda domiciliar, \nsegundo cor ou raça - Brasil 2012-2019",
     x = "Contribuição da renda do idoso na renda domiciliar total",
     y = "Densidade",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
@@ -750,10 +752,11 @@ pnad_idoso |>
   scale_fill_viridis_d(option = "D",begin = .2, end = .6) +
   scale_x_continuous(breaks = seq(0,100,10)) +
   labs(
-    title = "Distribuição de densidade da população por parcela da contribuição da renda do idoso oriunda da aposentadoria na renda domiciliar total,\n segundo cor ou raça - Brasil 2012-2019",
+    title = "(ii)",
+    # title = "Distribuição de densidade da população por parcela da contribuição da renda do idoso \noriunda da aposentadoria na renda domiciliar total, segundo cor ou raça - Brasil 2012-2019",
     x = "Contribuição da renda de aposentadoria na renda total do domicílio",
     y = "Densidade",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
