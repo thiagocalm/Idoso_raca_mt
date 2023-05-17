@@ -131,3 +131,79 @@ Dada a heterogeneidade subjacente ao grupo populacional em idade ativa e seus di
   
   - Por sexo.
 
+### Análises da Taxa de participação no mercado de trabalho
+
+1. Taxa segundo pop. idosa e não idosa (acima dos 10 anos) total e por cor ou raça entre 2012 e 2019.
+  
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+2. Taxa segundo pop. idosa por cor ou raça e total entre 2012 e 2019 por idade.
+
+  - Variação relativa da medida entre 2012 e 2019.
+    
+  - Por sexo.
+  
+3. Taxa segundo pop. idosa por cor ou raça e total entre 2012 e 2019 por sexo.
+
+  - Variação relativa da medida entre 2012 e 2019.
+
+4. Taxa segundo pop. idosa por cor ou raça e total entre 2012 e 2019 por escolaridade.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+5. Taxa segundo pop. idosa por cor ou raça e total entre 2012 e 2019 por Posição da renda domiicliar per capita.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+6. Taxa segundo pop. idosa por cor ou raça e total entre 2012 e 2019 por tipo de domicílio de residência.
+
+  - Variação relativa da medida entre 2012 e 2019.
+
+  - Por sexo.
+  
+7. Taxa segundo pop. idosa por cor ou raça e total entre 2012 e 2019 por existência de dependente.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+8. Taxa segundo pop. idosa por cor ou raça e total entre 2012 e 2019 por status de aposentadoria.
+
+  - Variação relativa da medida entre 2012 e 2019.
+  
+  - Por sexo.
+
+
+### Análise de composição 2: eletividade da população disponível para o trabalho
+
+1. População idosa e não idosa (acima dos 10 anos) total e por cor ou raça entre 2012 e 2019.
+
+  - Sexo.
+  
+  - Escolaridade
+  
+  - Posição na renda domiciliar per capita
+  
+  - Tipo de domicílio de residência
+  
+  - Existência de dependente
+  
+  - Status de aposentadoria
+
+2. População idosa por cor ou raça e total entre 2012 e 2019 por idade.
+
+  - Variação relativa da medida entre 2012 e 2019.
+    
+  - Por sexo.
+  
+3. População idosa por cor ou raça e total entre 2012 e 2019 por posição da renda do idoso na renda domiciliar, posicao da renda do idoso oriunda de aposentadoria na renda domiciliar e posicao da renda oriunda de aposentadoria na renda de todas as fontes.
+
+  - Variação relativa da medida entre 2012 e 2019.
+    
+  - Por sexo.
