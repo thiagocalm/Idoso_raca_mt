@@ -59,89 +59,48 @@ graf_df <- t_agregada |>
   filter(variaveis != "Criança e idoso") |>
   filter(variaveis != "Composta")
 
-(
-  (graf_df |>
-     filter(flag_idoso == "Nao_idoso" & cor_raca == "Branco") |>
-     ggplot() +
-     aes(x = ano, y = variaveis, fill = prop_fct) +
-     geom_tile(color = "white", linewidth = 1.5, linetype = 1, show.legend = F) +
-     coord_fixed() +
-     scale_fill_brewer(palette = "RdBu", direction = -1) +
-     theme_minimal() +
-     labs(
-       title = "Não idoso",
-       y = "Branco",
-       fill = "Prop (%)"
-     ) +
-     theme(
-       plot.title = element_text(size = 10, face = "bold", hjust = 0),
-       axis.text.x = element_text(angle = 90, size = 8),
-       axis.text.y = element_text(size = 9),
-       axis.title.y = element_text(size = 10, face = "bold", hjust = 1),
-       axis.title.x = element_blank(),
-     )) +
-    (graf_df |>
-       filter(flag_idoso == "Idoso" & cor_raca == "Branco") |>
-       ggplot() +
-       aes(x = ano, y = variaveis, fill = prop_fct) +
-       geom_tile(color = "white", linewidth = 1.5, linetype = 1, show.legend = F) +
-       coord_fixed() +
-       scale_fill_brewer(palette = "RdBu", direction = -1) +
-       theme_minimal() +
-       labs(
-         title = "Idoso",
-         y = "Branco",
-         fill = "Prop (%)"
-       ) +
-       theme(
-         plot.title = element_text(size = 10, face = "bold", hjust = 0),
-         axis.text.x = element_text(angle = 90, size = 8),
-         axis.text.y = element_blank(),
-         # axis.title.y = element_text(size = 10, face = "bold", hjust = 1),
-         axis.title = element_blank(),
-       ))
-)+
-(
-  (graf_df |>
-     filter(flag_idoso == "Nao_idoso" & cor_raca == "Negro") |>
-     ggplot() +
-     aes(x = ano, y = variaveis, fill = prop_fct) +
-     geom_tile(color = "white", linewidth = 1.5, linetype = 1, show.legend = F) +
-     coord_fixed() +
-     scale_fill_brewer(palette = "RdBu", direction = -1) +
-     theme_minimal() +
-     labs(
-       title = "Não idoso",
-       y = "Negro",
-       fill = "Prop (%)"
-     ) +
-     theme(
-       plot.title = element_text(size = 10, face = "bold", hjust = 0),
-       axis.text.x = element_text(angle = 90, size = 8),
-       axis.text.y = element_text(size = 9),
-       axis.title.y = element_text(size = 10, face = "bold", hjust = 1),
-       axis.title.x = element_blank(),
-     )) +
-    (graf_df |>
-       filter(flag_idoso == "Idoso" & cor_raca == "Negro") |>
-       ggplot() +
-       aes(x = ano, y = variaveis, fill = prop_fct) +
-       geom_tile(color = "white", linewidth = 1.5, linetype = 1) +
-       coord_fixed() +
-       scale_fill_brewer(palette = "RdBu", direction = -1) +
-       theme_minimal() +
-       labs(
-         title = "Idoso",
-         y = "Negro",
-         fill = "Prop (%)"
-       ) +
-       theme(
-         plot.title = element_text(size = 10, face = "bold", hjust = 0),
-         axis.text.x = element_text(angle = 90, size = 8),
-         axis.text.y = element_blank(),
-         # axis.title.y = element_text(size = 10, face = "bold", hjust = 1),
-         axis.title = element_blank(),
-       ))
-)
+# grafico
 
+graf_df |>
+  mutate(
+    variaveis = factor(
+      variaveis,
+      levels = c("Pop. total","Sexo - Feminino","Sexo - Masculino",
+             "Escolaridade - Nenhum", "Escolaridade - Fund.",
+             "Escolaridade - Médio", "Escolaridade - Superior",
+             "P20", "P40", "P60", "P80","P100", "Aposentado",
+             "Tem dependente - Criança", "Tem dependente - Idoso",
+             "Tipo dom. - Unipessoal", "Tipo dom. - Nuclear",
+             "Tipo dom. - Estendido"),
+      labels = c("Pop. total","Sexo - Feminino","Sexo - Masculino",
+                 "Escolaridade - Nenhum", "Escolaridade - Fund.",
+                 "Escolaridade - Médio", "Escolaridade - Superior",
+                 "P20", "P40", "P60", "P80","P100", "Aposentado",
+                 "Tem dependente - Criança", "Tem dependente - Idoso",
+                 "Tipo dom. - Unipessoal", "Tipo dom. - Nuclear",
+                 "Tipo dom. - Estendido")),
+    flag_idoso = factor(
+      flag_idoso,
+      levels = c("Nao_idoso", "Idoso"),
+      labels = c("Não idoso", "Idoso")
+    )) |>
+  ggplot() +
+  aes(x = ano, y = fct_rev(variaveis), fill = prop_fct) +
+  geom_tile(color = "white", linewidth = 1.5, linetype = 1) +
+  coord_fixed() +
+  scale_fill_brewer(palette = "RdBu", direction = -1) +
+  theme_minimal() +
+  labs(
+    fill = "Prop (%)",
+    y = "Características",
+    x = "Ano calendário"
+  ) +
+  facet_wrap(~cor_raca + flag_idoso, nrow = 1, ncol = 4) +
+  theme(
+    legend.title = element_text(size = 10, face = "bold"),
+    legend.text = element_text(size = 9),
+    axis.text.x = element_text(angle = 90, size = 8),
+    axis.text.y = element_text(size = 9),
+    axis.title = element_text(size = 10, face = "bold", hjust = 1)
+  )
 
