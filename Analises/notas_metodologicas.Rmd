@@ -207,3 +207,25 @@ Dada a heterogeneidade subjacente ao grupo populacional em idade ativa e seus di
   - Variação relativa da medida entre 2012 e 2019.
     
   - Por sexo.
+  
+## Análise da seção 2: heterogeneidades espaciais
+
+**Decisões metodológicas**
+
+- População a ser analisada
+
+  - Restringir somente à população idosa de agora em diante!!!
+
+- Recortes espaciais a serem analisados
+
+  - Condição de residência (rural, urbano não-metropolitano, urbano metropolitano).
+  
+  - Regiões geográficas
+  
+- Período analisado
+
+  - O mais recente pré-pandemia de Covid-19: 2019.
+  
+- Manipulação de variáveis
+
+  - Posição na distribuição de renda domiciliar per capita: refazer a distribuição por condição de residência (rural e urbana) e região geográfica para controlar por heterogeneidades salariais e econômicas existentes (**TENHO QUE VER ALGUM TRABALHO QUE VERSA SOBRE ISSO**).

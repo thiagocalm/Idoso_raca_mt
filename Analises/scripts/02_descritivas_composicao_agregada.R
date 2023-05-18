@@ -194,7 +194,7 @@ t_part_tipodom <- pnad_idoso_plan |>
 
 # Existencia de dependente
 
-t_part_tem_dep <- pnad_plan |>
+t_part_tem_dep <- pnad_idoso_plan |>
   group_by(ano, cor_raca, flag_participa, tem_crianca, tem_idoso_dependente) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
