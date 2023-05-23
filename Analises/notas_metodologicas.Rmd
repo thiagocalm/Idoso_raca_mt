@@ -232,44 +232,39 @@ Dada a heterogeneidade subjacente ao grupo populacional em idade ativa e seus di
 
 **Análises**
 
-- Focar nas principais características destacadas na etapa anterior.
-
-  - Sexo
-  
-  - Escolaridade
-  
-  - Distribuiçao de renda
-  
-  - Condição de aposentadoria
-  
-  - Contribuição na renda total domiciliar.
-  
 - Apresenta a população distribuída espacialmente por cor ou raça (só para ver se há alguma concentração) [TALVEZ SEJA UMA TABELA QUE, NO FINAL, FICARÁ NO ANEXO. MAS ISSO DEIXA PRA DECIDIR NO FINAL rsrs].
 
   - Distribuição por status metropolitano (Pop. Negra, Branca, Total)
   
   - Distribuição por Região Geográfica (Pop. Negra, Branca, Total)
   
-- Apresentação da distribuição das características da população
+- Apresentar a distribuição da população por cor ou raça, segundo idade e sexo para cada uma das unidades de desagregação espacial com o intuito de compreender se há uma heterogeneidade por cor ou raça na distribuição dessa população ao longo das características demográficas.
 
-  - Sexo
+  - Distribuição da população segundo grupo etário quinquenal, para cada status metropolitano (Pop. Negra, Branca, Total)
   
-  - Escolaridade
-  
-  - Distribuiçao de renda
-  
-  - Condição de aposentadoria
-  
-  - Contribuição na renda total domiciliar.
-  
-- Apresentação da taxa de participação
+    - Distribuição da população segundo grupo etário quinquenal, para cada região geográfica (Pop. Negra, Branca, Total).
 
-  - Sexo
+  - **O que se espera apontar com esta discussão de composição?** Espera-se que consiga apontar para possíveis heterogeneidades regionais no processo de transição demográfica da da população e que possa ser identificados diferenciais raciais.
+
+
+- Taxas de participação no MT por cor ou raça, segundo desagregações espaciais.
+
+  - Taxa de participação no MT por cor ou raça, segundo status metropolitano.
   
-  - Escolaridade
+  - Taxa de participação no MT por cor ou raça, segundo região geográfica.
+
+  - **O que se espera apontar com esta discussão de participação?** Padrões espaciais diferenciais na participação no mercado de trabalho e recortes os quais apresentam maior/menor homogeneidade racial na participação.
+
+- Composição por outras características
+
+  - Focar nas principais características destacadas no objetivo 1 e que não foram exploradas no início do objetivo 2.
+
+    - Escolaridade
   
-  - Distribuiçao de renda
+    - Distribuiçao de renda
   
-  - Condição de aposentadoria
+    - Condição de aposentadoria
   
-  - Contribuição na renda total domiciliar.
+    - Contribuição na renda total domiciliar
+  
+  - **O que se espra apontar com esta discussão de composição por outras características?** Breve discussão das composições existentes nas outras características e que merecem ser exploradas. Isso servirá de gancho para explorar, no objetivo 3, efeitos líquidos da participação no mercado de trabalho.
