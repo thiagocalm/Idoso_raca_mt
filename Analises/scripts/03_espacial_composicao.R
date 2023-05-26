@@ -132,6 +132,16 @@ t_regiao_idade <- pnad_esp_idoso_plan |>
   ) |>
   arrange(cor_raca)
 
+# 3. Por condição de residência (agregada) e UF ------------------------------------
+
+# Total
+
+t_uf_total <- pnad_esp_idoso_plan |>
+  group_by(cor_raca, cond_residencia, UF) |>
+  summarise(n = survey_total(),
+            prop = round(survey_mean(na.rm = TRUE)*100,2)) |>
+  arrange(cor_raca, cond_residencia)
+
 # Agrupando resultados ----------------------------------------------------
 
 # 1. Por condicao de residência
@@ -148,8 +158,14 @@ composicao_regiao <- list(total = t_regiao_total,
                       sexo = t_regiao_sexo,
                       idade = t_regiao_idade)
 
+# 3. Por condicao de residencia e UF
+
+composicao_uf <- list(total = t_uf_total)
+
 # Salvando resultados -----------------------------------------------------
 
 save(composicao_rm, file = "./Analises/outputs/pt2/descritiva_composicao_rm_dem.RData")
 
 save(composicao_regiao, file = "./Analises/outputs/pt2/descritiva_composicao_regiao_dem.RData")
+
+save(composicao_uf, file = "./Analises/outputs/pt2/descritiva_composicao_uf.RData")

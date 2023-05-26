@@ -242,10 +242,9 @@ Dada a heterogeneidade subjacente ao grupo populacional em idade ativa e seus di
 
   - Distribuição da população segundo grupo etário quinquenal, para cada status metropolitano (Pop. Negra, Branca, Total)
   
-    - Distribuição da população segundo grupo etário quinquenal, para cada região geográfica (Pop. Negra, Branca, Total).
+  - Distribuição da população segundo grupo etário quinquenal, para cada região geográfica (Pop. Negra, Branca, Total).
 
-  - **O que se espera apontar com esta discussão de composição?** Espera-se que consiga apontar para possíveis heterogeneidades regionais no processo de transição demográfica da da população e que possa ser identificados diferenciais raciais.
-
+  - **O que se espera apontar com esta discussão de composição?** Espera-se que consiga apontar para possíveis heterogeneidades regionais no processo de transição demográfica da população e que possa ser identificados diferenciais raciais.
 
 - Taxas de participação no MT por cor ou raça, segundo desagregações espaciais.
 

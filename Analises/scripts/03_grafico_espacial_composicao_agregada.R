@@ -81,8 +81,15 @@ graf_rm |>
     TRUE ~ "Fora da FT"
   )) |>
   filter(variaveis != "Pop. total") |>
+  filter(variaveis != "Sexo - Feminino") |>
+  filter(variaveis != "Sexo - Masculino") |>
+  filter(variaveis != "Tem dependente - Criança") |>
+  filter(variaveis != "Tem dependente - Idoso") |>
+  filter(variaveis != "Tipo dom. - Unipessoal") |>
+  filter(variaveis != "Tipo dom. - Nuclear") |>
+  filter(variaveis != "Tipo dom. - Estendido") |>
   ggplot() +
-  aes(x = status_rm, y = fct_rev(variaveis), fill = prop_fct) +
+  aes(x = cor_raca, y = fct_rev(variaveis), fill = prop_fct) +
   geom_tile(color = "white", linewidth = 1.5, linetype = 1) +
   coord_fixed() +
   scale_fill_brewer(palette = "RdBu", direction = -1) +
@@ -93,7 +100,7 @@ graf_rm |>
     y = "Características",
     x = "Ano calendário"
   ) +
-  facet_wrap(~cor_raca + flag_participa, nrow = 1, ncol = 4) +
+  facet_wrap(. ~ status_rm + flag_participa, nrow = 1, ncol = 6) +
   theme(
     plot.caption = element_text(size = 8, face = "italic", hjust = 1),
     legend.title = element_text(size = 10, face = "bold"),
@@ -171,8 +178,16 @@ graf_regiao |>
     TRUE ~ "Fora da FT"
   )) |>
   filter(variaveis != "Pop. total") |>
+  filter(variaveis != "Pop. total") |>
+  filter(variaveis != "Sexo - Feminino") |>
+  filter(variaveis != "Sexo - Masculino") |>
+  filter(variaveis != "Tem dependente - Criança") |>
+  filter(variaveis != "Tem dependente - Idoso") |>
+  filter(variaveis != "Tipo dom. - Unipessoal") |>
+  filter(variaveis != "Tipo dom. - Nuclear") |>
+  filter(variaveis != "Tipo dom. - Estendido") |>
   ggplot() +
-  aes(x = regiao, y = fct_rev(variaveis), fill = prop_fct) +
+  aes(x = cor_raca, y = fct_rev(variaveis), fill = prop_fct) +
   geom_tile(color = "white", linewidth = 1.5, linetype = 1) +
   coord_fixed() +
   scale_fill_brewer(palette = "RdBu", direction = -1) +
@@ -183,7 +198,7 @@ graf_regiao |>
     y = "Características",
     x = "Ano calendário"
   ) +
-  facet_wrap(~cor_raca + flag_participa, nrow = 1, ncol = 4) +
+  facet_wrap(~regiao + flag_participa, nrow = 1, ncol = 10) +
   theme(
     plot.caption = element_text(size = 8, face = "italic", hjust = 1),
     legend.title = element_text(size = 10, face = "bold"),

@@ -145,6 +145,18 @@ t_regiao_idade <- pnad_esp_idoso_plan |>
   filter(flag_participa == "forca_trabalho") |>
   select(-flag_participa)
 
+# 3. Por condição de residência (agregada) e UF ------------------------------------
+
+# Total
+
+t_uf_total <- pnad_esp_idoso_plan |>
+  group_by(cor_raca, cond_residencia, UF, flag_participa) |>
+  summarise(n = survey_total(),
+            taxa = round(survey_mean(na.rm = TRUE)*100,2)) |>
+  arrange(cor_raca, cond_residencia) |>
+  filter(flag_participa == "forca_trabalho") |>
+  select(-flag_participa)
+
 # Agrupando resultados ----------------------------------------------------
 
 # 1. Por condicao de residência
@@ -161,8 +173,14 @@ taxa_regiao <- list(total = t_regiao_total,
                           sexo = t_regiao_sexo,
                           idade = t_regiao_idade)
 
+# 3. Por UF
+
+taxa_uf <- list(total = t_uf_total)
+
 # Salvando resultados -----------------------------------------------------
 
 save(taxa_rm, file = "./Analises/outputs/pt2/descritiva_taxa_rm_dem.RData")
 
 save(taxa_regiao, file = "./Analises/outputs/pt2/descritiva_taxa_regiao_dem.RData")
+
+save(taxa_uf, file = "./Analises/outputs/pt2/descritiva_taxa_uf.RData")
