@@ -127,6 +127,41 @@ descritivas_composicao$t3 |>
     legend.position = "top"
   )
 
+# Total (somente para 2019)
+
+descritivas_composicao$t3 |>
+  filter(grupo_etario <= 90) |>
+  filter(ano %in% c(2019)) |>
+  filter(cor_raca != "Total") |>
+  ggplot() +
+  aes(x = grupo_etario, y = prop, color = cor_raca, interaction(grupo_etario, grupo_etario)) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1.05) +
+  geom_errorbar(aes(ymin=prop-prop_se*1.96, ymax=prop+prop_se*1.96), width=.1,
+                linetype = "solid") +
+  scale_color_viridis_d(option = "D",begin = .1, end = .6) +
+  coord_cartesian(ylim = c(0,max(descritivas_composicao$t3$prop)+10)) +
+  scale_x_continuous(breaks = seq(60,90,5)) +
+  scale_y_continuous(breaks = seq(0,max(descritivas_composicao$t3$prop)+10,10)) +
+  # lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
+  labs(
+    title = "(i)",
+    x = "Idade (grupos quinquenais)",
+    y = "População (%)",
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+  ) +
+  theme_light() +
+  theme(
+    plot.title = element_text(face = "bold", size = 15, color = "#525252", hjust = .5),
+    axis.title = element_text(size = 15, hjust = .5, color = "#525252"),
+    strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
+    strip.background = element_blank(),
+    axis.text = element_text(size = 13, color = "#969696"),
+    plot.caption = element_text(face = "bold", size = 8, hjust = 1, color = "#525252"),
+    legend.title = element_blank(),
+    legend.text = element_text(size = 13, color = "#525252"),
+    legend.position = "top"
+  )
 # Por sexo
 
 descritivas_composicao$t3_by_sex |>
@@ -812,3 +847,25 @@ pnad_idoso |>
     legend.text = element_text(size = 9, color = "#525252"),
     legend.position = "top"
   )
+
+# Tabela
+
+t7_tabela <- pnad_idoso |>
+  filter(ano %in% c(2019)) |>
+  mutate(
+    inc_prop_individuo = case_when(is.na(inc_prop_individuo) ~ 0,
+                                   TRUE ~ inc_prop_individuo),
+    inc_prop_aposentado = case_when(is.na(inc_prop_aposentado) ~ 0,
+                                    TRUE ~ inc_prop_aposentado),
+    inc_prop_aposentado_dom = case_when(is.na(inc_prop_aposentado_dom) ~ 0,
+                                        TRUE ~ inc_prop_aposentado_dom),
+    anofct = fct_rev(as.factor(ano)),
+    flag_participa = as.factor(case_when(
+      flag_participa == "forca_trabalho" ~ "Na força de trabalho",
+      TRUE ~ "Fora da força de trabalho"))
+  ) |>
+  group_by(cor_raca, flag_participa) |>
+  summarise("Contribuição da renda do idoso de todas as fontes" = 100*srvyr::survey_mean(inc_prop_individuo, na.rm = T),
+            "Contribuição da renda do idoso oriunda de aposentadoria" = 100*srvyr::survey_mean(inc_prop_aposentado_dom, na.rm = T))
+
+clipr::write_clip(t7_tabela, dec = ",")

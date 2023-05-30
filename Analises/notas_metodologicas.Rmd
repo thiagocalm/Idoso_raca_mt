@@ -264,6 +264,4 @@ Dada a heterogeneidade subjacente ao grupo populacional em idade ativa e seus di
   
     - Condição de aposentadoria
   
-    - Contribuição na renda total domiciliar
-  
   - **O que se espra apontar com esta discussão de composição por outras características?** Breve discussão das composições existentes nas outras características e que merecem ser exploradas. Isso servirá de gancho para explorar, no objetivo 3, efeitos líquidos da participação no mercado de trabalho.

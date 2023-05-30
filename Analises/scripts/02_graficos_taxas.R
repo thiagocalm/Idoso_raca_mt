@@ -37,11 +37,11 @@ descritivas_taxa$t1 |>
   theme_light() +
   theme(
     plot.title = element_text(face = "bold", size = 14, color = "#525252"),
-    axis.title = element_text(size = 11, hjust = .5, color = "#525252"),
-    axis.text = element_text(size = 9, color = "#969696"),
+    axis.title = element_text(size = 15, hjust = .5, color = "#525252"),
+    axis.text = element_text(size = 13, color = "#969696"),
     plot.caption = element_text(face = "bold", size = 8, hjust = 1, color = "#525252"),
     legend.title = element_blank(),
-    legend.text = element_text(size = 9, color = "#525252"),
+    legend.text = element_text(size = 13, color = "#525252"),
     legend.position = "top"
   )
 
@@ -119,6 +119,43 @@ descritivas_taxa$t2 |>
     legend.position = "top"
   )
 
+# Total (somente 2019)
+
+descritivas_taxa$t2 |>
+  filter(flag_participa == "forca_trabalho") |>
+  filter(grupo_etario <= 90) |>
+  filter(ano %in% c(2019)) |>
+  filter(cor_raca != "Total") |>
+  ggplot() +
+  aes(x = grupo_etario, y = prop, color = cor_raca, interaction(grupo_etario, grupo_etario)) +
+  geom_point(size = 3) +
+  geom_line(linewidth = 1.05) +
+  geom_errorbar(aes(ymin=prop-prop_se*1.96, ymax=prop+prop_se*1.96), width=.1,
+                linetype = "solid") +
+  scale_color_viridis_d(option = "D",begin = .1, end = .6) +
+  coord_cartesian(ylim = c(0,75)) +
+  scale_x_continuous(breaks = seq(60,90,5)) +
+  scale_y_continuous(breaks = seq(0,80,10)) +
+  # lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
+  labs(
+    title = "(ii)",
+    x = "Idade (grupos quinquenais)",
+    y = "Taxa Específica de Participação no Mercado de Trabalho",
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+  ) +
+  theme_light() +
+  theme(
+    plot.title = element_text(face = "bold", size = 15, color = "#525252", hjust = .5),
+    axis.title = element_text(size = 15, hjust = .5, color = "#525252"),
+    strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
+    strip.background = element_blank(),
+    axis.text = element_text(size = 13, color = "#969696"),
+    plot.caption = element_text(face = "bold", size = 8, hjust = 1, color = "#525252"),
+    legend.title = element_blank(),
+    legend.text = element_text(size = 13, color = "#525252"),
+    legend.position = "top"
+  )
+
 # Por sexo
 
 descritivas_taxa$t2_by_sex |>
@@ -164,6 +201,8 @@ descritivas_taxa$t3 |>
   filter(flag_participa == "forca_trabalho") |>
   filter(ano %in% c(2012,2015,2019)) |>
   filter(cor_raca != "Total") |>
+  mutate(educ_atingida = factor(educ_atingida, levels = c("Sem instrução","Ensino Fundamental", "Ensino Médio",
+                                                          "Ensino Superior"))) |>
   ggplot() +
   aes(x = educ_atingida, y = prop, fill = cor_raca) +
   geom_col(position = position_dodge2(0.1)) +
@@ -176,19 +215,19 @@ descritivas_taxa$t3 |>
   labs(
     # title = "Taxa Específica de Participação no Mercado de Trabalho por escolaridade atingida, segundo cor ou raça - Brasil 2012-2019",
     x = "Ano Calendário",
-    y = "Taxa Específica de Participação no Mercado de Trabalho por escolaridade",
+    y = "Taxa Específica de Participação no Mercado de Trabalho",
     # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
     plot.title = element_text(face = "bold", size = 14, color = "#525252"),
-    axis.title = element_text(size = 11, hjust = .5, color = "#525252"),
+    axis.title = element_text(size = 15, hjust = .5, color = "#525252"),
     strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
     strip.background = element_blank(),
-    axis.text = element_text(size = 9, color = "#969696"),
+    axis.text = element_text(size = 13, color = "#969696"),
     plot.caption = element_text(face = "bold", size = 8, hjust = 1, color = "#525252"),
     legend.title = element_blank(),
-    legend.text = element_text(size = 9, color = "#525252"),
+    legend.text = element_text(size = 13, color = "#525252"),
     legend.position = "top"
   )
 
@@ -252,21 +291,21 @@ descritivas_taxa$t4 |>
   scale_y_continuous(breaks = seq(0,80,10)) +
   lemon::facet_rep_grid(. ~ as.factor(ano), repeat.tick.labels = TRUE) +
   labs(
-    title = "Taxa Específica de Participação no Mercado de Trabalho por quintil de renda domiciliar per capita de todas as fontes, segundo cor ou raça - Brasil 2012-2019",
+    # title = "Taxa Específica de Participação no Mercado de Trabalho por quintil de renda domiciliar per capita de todas as fontes, segundo cor ou raça - Brasil 2012-2019",
     x = "Ano Calendário",
     y = "Taxa Específica de Participação no Mercado de Trabalho",
-    caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
+    # caption = "Fonte: IBGE, Pesquisa Nacional Por Amostra de Domicílios Anual, 2012-2019."
   ) +
   theme_light() +
   theme(
     plot.title = element_text(face = "bold", size = 14, color = "#525252"),
-    axis.title = element_text(size = 11, hjust = .5, color = "#525252"),
+    axis.title = element_text(size = 15, hjust = .5, color = "#525252"),
     strip.text = element_text(face = "bold", size = 11, hjust = .5, color = "#525252"),
     strip.background = element_blank(),
-    axis.text = element_text(size = 9, color = "#969696"),
+    axis.text = element_text(size = 13, color = "#969696"),
     plot.caption = element_text(face = "bold", size = 8, hjust = 1, color = "#525252"),
     legend.title = element_blank(),
-    legend.text = element_text(size = 9, color = "#525252"),
+    legend.text = element_text(size = 13, color = "#525252"),
     legend.position = "top"
   )
 
