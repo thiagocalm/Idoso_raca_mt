@@ -36,7 +36,12 @@ pnad_idoso <- pnad |>
     cor_raca = as.factor(cor_raca),
     flag_participa = as.integer(case_when(
       flag_participa == "forca_trabalho" ~ 1,
-      TRUE ~ 0))) |>
+      TRUE ~ 0)),
+    educ_atingida = factor(educ_atingida,
+                           level = c("Sem instrução", "Ensino Fundamental", "Ensino Médio",
+                                     "Ensino Superior"),
+                           labels = c("Sem instrução", "Ensino Fundamental", "Ensino Médio",
+                                     "Ensino Superior"))) |>
   select(-c(tem_crianca, tem_idoso_dependente)) |>
   srvyr::as_survey_design(ids = id_pes,
                           weights = peso)
@@ -118,4 +123,49 @@ summary_mod6 <- summary(reg_mod6)
 
 # Sintese
 
-stargazer::stargazer(reg_mod1, reg_mod2, reg_mod3, reg_mod4, reg_mod5, reg_mod6,type = "text")
+resumo_mod <- stargazer::stargazer(
+  reg_mod2, reg_mod4, reg_mod6,
+  type = "text",
+  title = "Tabela síntese das estimativas do modelo de regressão com variáveis interativas para cor ou raça",
+  column.labels = c("Brasil","Urbano","Rural"),
+  dep.var.caption = c("Variável dependente:"),
+  dep.var.labels = c("Se participa do mercado de trabalho"),
+  decimal.mark = ",",
+  digit.separator = ".",
+  intercept.top = TRUE,
+  intercept.bottom = FALSE
+)
+
+resultados <- summary_mod2$coefficients[,c(1:4)] |>
+  as_tibble() |>
+  mutate(coeficientes = Estimate,
+         p_value = round(`Pr(>|t|)`,5),
+         variaveis = row.names(summary_mod2$coefficients[,0]),
+         se_95 = summary_mod2$coefficients[,2]*1.96,
+         OR = exp(coeficientes),
+         modelo = "Brasil") |>
+  select(modelo, variaveis, coeficientes, se_95, OR, p_value) |>
+  bind_rows(
+    summary_mod4$coefficients[,c(1:4)] |>
+      as_tibble() |>
+      mutate(coeficientes = Estimate,
+             p_value = round(`Pr(>|t|)`,5),
+             variaveis = row.names(summary_mod4$coefficients[,0]),
+             se_95 = summary_mod4$coefficients[,2]*1.96,
+             OR = exp(coeficientes),
+             modelo = "Rural") |>
+      select(modelo, variaveis, coeficientes, se_95, OR, p_value)
+  ) |>
+  bind_rows(
+    summary_mod6$coefficients[,c(1:4)] |>
+      as_tibble() |>
+      mutate(coeficientes = Estimate,
+             p_value = round(`Pr(>|t|)`,5),
+             variaveis = row.names(summary_mod6$coefficients[,0]),
+             se_95 = summary_mod6$coefficients[,2]*1.96,
+             OR = exp(coeficientes),
+             modelo = "Rural") |>
+      select(modelo, variaveis, coeficientes, se_95, OR, p_value)
+  )
+
+openxlsx::write.xlsx(resultados, file = "./Analises/outputs/pt3/tabela_sintese_regressao.xlsx")
