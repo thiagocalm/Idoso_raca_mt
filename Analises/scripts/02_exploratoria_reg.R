@@ -5,7 +5,10 @@ options(scipen = 99999)
 ifelse(!require(tidyverse),install.packages("tidyverse"),require(tidyverse))
 ifelse(!require(srvyr),install.packages("srvyr"),require(srvyr))
 ifelse(!require(survey),install.packages("survey"),require(survey))
-
+ifelse(!require(lmtest),install.packages("lmtest"),require(lmtest))
+ifelse(!require(car),install.packages("car"),require(car))
+ifelse(!require(DescTools),install.packages("DescTools"),require(DescTools))
+ifelse(!require(openxlsx),install.packages("openxlsx"),require(openxlsx))
 
 # Importacao dos dados ----------------------------------------------------
 
@@ -31,6 +34,8 @@ pnad_idoso <- pnad |>
                                    TRUE ~ inc_prop_individuo),
     inc_prop_aposentado_dom = case_when(is.na(inc_prop_aposentado_dom) ~ 0,
                                         TRUE ~ inc_prop_aposentado_dom),
+    inc_prop_individuo = scale(inc_prop_individuo, scale = FALSE), #Centralizar valores na media
+    inc_prop_aposentado_dom = scale(inc_prop_aposentado_dom, scale = FALSE),  #Centralizar valores na media
     anofct = as.factor(ano),
     grupo_etario = as.factor(grupo_etario),
     cor_raca = as.factor(cor_raca),
@@ -48,8 +53,6 @@ pnad_idoso <- pnad |>
 
 rm(pnad)
 
-
-
 # Modelo 1 - Geral --------------------------------------------------------
 
 reg_mod1 <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc + educ_atingida +
@@ -57,7 +60,6 @@ reg_mod1 <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc
                     design = pnad_idoso, family = binomial())
 
 summary_mod1 <- summary(reg_mod1)
-
 
 # Modelo 2 - Geral com interacao ------------------------------------------
 
@@ -84,7 +86,6 @@ reg_mod3 <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc
 
 summary_mod3 <- summary(reg_mod3)
 
-
 # Modelo 4 - Urbano com interacao ------------------------------------------
 
 reg_mod4 <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
@@ -108,7 +109,6 @@ reg_mod5 <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc
 
 summary_mod5 <- summary(reg_mod5)
 
-
 # Modelo 6 - Rural com interacao ------------------------------------------
 
 reg_mod6 <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
@@ -120,21 +120,26 @@ reg_mod6 <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_ati
 
 summary_mod6 <- summary(reg_mod6)
 
+# Sintese -----------------------------------------------------------------
 
-# Sintese
+# Avaliacao das estimativas
+# Pseudo R2 (McFadden)
 
-resumo_mod <- stargazer::stargazer(
-  reg_mod2, reg_mod4, reg_mod6,
-  type = "text",
-  title = "Tabela síntese das estimativas do modelo de regressão com variáveis interativas para cor ou raça",
-  column.labels = c("Brasil","Urbano","Rural"),
-  dep.var.caption = c("Variável dependente:"),
-  dep.var.labels = c("Se participa do mercado de trabalho"),
-  decimal.mark = ",",
-  digit.separator = ".",
-  intercept.top = TRUE,
-  intercept.bottom = FALSE
-)
+1 - reg_mod2$deviance / reg_mod2$null.deviance # mod geral
+1 - reg_mod4$deviance / reg_mod4$null.deviance # mod urbano
+1 - reg_mod6$deviance / reg_mod6$null.deviance # mod rural
+
+# AIC analysis
+
+reg_mod2$aic #AIC MOD geral
+reg_mod4$aic #AIC MOD urbano
+reg_mod6$aic #AIC MOD rural
+
+# VIF test
+
+car::vif(reg_mod2) #VIF mod geral
+car::vif(reg_mod4) #VIF mod urbano
+car::vif(reg_mod6) #VIF mod rural
 
 resultados <- summary_mod2$coefficients[,c(1:4)] |>
   as_tibble() |>
@@ -153,7 +158,7 @@ resultados <- summary_mod2$coefficients[,c(1:4)] |>
              variaveis = row.names(summary_mod4$coefficients[,0]),
              se_95 = summary_mod4$coefficients[,2]*1.96,
              OR = exp(coeficientes),
-             modelo = "Rural") |>
+             modelo = "Urbano") |>
       select(modelo, variaveis, coeficientes, se_95, OR, p_value)
   ) |>
   bind_rows(
@@ -169,3 +174,18 @@ resultados <- summary_mod2$coefficients[,c(1:4)] |>
   )
 
 openxlsx::write.xlsx(resultados, file = "./Analises/outputs/pt3/tabela_sintese_regressao.xlsx")
+
+
+# Analise dos resultados --------------------------------------------------
+
+predict_values <- predict(reg_mod2, pnad_idoso,type="response") |> as_tibble()
+
+pnad_idoso |>
+  mutate(prob_predita = predict_values$response) |>
+  filter(ano == 2019) |>
+  group_by(cor_raca, grupo_etario) |>
+  summarise(prob = survey_mean(prob_predita, na.rm = TRUE)) |>
+  ggplot() +
+  aes(x = as.factor(grupo_etario), y = prob, linetype = cor_raca, group = cor_raca) +
+  geom_line()
+
