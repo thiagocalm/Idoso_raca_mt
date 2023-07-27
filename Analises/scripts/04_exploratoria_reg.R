@@ -9,6 +9,7 @@ ifelse(!require(lmtest),install.packages("lmtest"),require(lmtest))
 ifelse(!require(car),install.packages("car"),require(car))
 ifelse(!require(DescTools),install.packages("DescTools"),require(DescTools))
 ifelse(!require(openxlsx),install.packages("openxlsx"),require(openxlsx))
+ifelse(!require(gtsummary),install.packages("gtsummary"),require(gtsummary))
 
 # Importacao dos dados ----------------------------------------------------
 
@@ -41,8 +42,6 @@ pnad_idoso <- pnad |>
                                    TRUE ~ inc_prop_individuo),
     inc_prop_aposentado_dom = case_when(is.na(inc_prop_aposentado_dom) ~ 0,
                                         TRUE ~ inc_prop_aposentado_dom),
-    inc_prop_individuo = scale(inc_prop_individuo, scale = FALSE), #Centralizar valores na media
-    inc_prop_aposentado_dom = scale(inc_prop_aposentado_dom, scale = FALSE),  #Centralizar valores na media
     anofct = as.factor(ano),
     grupo_etario = as.factor(grupo_etario),
     cor_raca = as.factor(cor_raca),
@@ -197,3 +196,63 @@ resumo_mod <- stargazer::stargazer(
   intercept.top = TRUE,
   intercept.bottom = FALSE
 )
+
+
+# Tabela resumo das variaveis utilizadas ----------------------------------
+
+# Geral
+tabela_geral <- pnad_idoso |>
+  tbl_svysummary(
+    #by = presenca_filho,
+    statistic = list(all_continuous() ~ "{mean} ({sd})",        # stats and format for continuous columns
+                     all_categorical() ~ "{n} ({p}%)"),   # stats and format for categorical columns
+    digits = all_continuous() ~ 4,                              # rounding for continuous columns
+    type   = list(all_categorical() ~ "categorical",
+                  c(inc_prop_individuo, inc_prop_aposentado_dom) ~ "continuous"), # force all categorical levels to display
+    label  = list(                                              # display labels for column names
+      flag_participa ~ "Participa do merc. trabalho",
+      cor_raca ~ "Cor ou raça",
+      sexo ~ "Sexo",
+      grupo_etario ~ "Idade (grupo etário quinquenal)",
+      quintil_inc ~ "Estrato de renda (quintil)",
+      educ_atingida ~ "Escolaridade atingida",
+      inc_prop_individuo ~ "Parcela de contribuição na renda total do domicílio",
+      inc_prop_aposentado_dom ~ "Parcela de contribuição da aposentadoria na renda total do domicílio",
+      flag_aposentadoria ~ "Recebe aposentadoria",
+      tipo_dom ~ "Tipo de domicílio de residência",
+      status_rm ~ "Status do local de residência",
+      regiao ~ "Região geográfica de residência"),
+    include = c(flag_participa,cor_raca,sexo,grupo_etario,quintil_inc,educ_atingida,
+                inc_prop_individuo,inc_prop_aposentado_dom,flag_aposentadoria,tipo_dom,
+                status_rm,regiao),
+    missing_text = "Missing")
+
+tabela_geral |>
+  flextable::as_flextable() |>
+  flextable::save_as_docx(path = "tabela_reg_geral.docx")
+
+# Por cor ou raca
+tabela_raca <- pnad_idoso |>
+  tbl_svysummary(
+    by = cor_raca,
+    statistic = list(all_continuous() ~ "{mean} ({sd})",        # stats and format for continuous columns
+                     all_categorical() ~ "{n} ({p}%)"),   # stats and format for categorical columns
+    digits = all_continuous() ~ 4,                              # rounding for continuous columns
+    type   = list(all_categorical() ~ "categorical",
+                  c(inc_prop_individuo, inc_prop_aposentado_dom) ~ "continuous"), # force all categorical levels to display
+    label  = list(                                              # display labels for column names
+      flag_participa ~ "Participa do merc. trabalho",
+      sexo ~ "Sexo",
+      grupo_etario ~ "Idade (grupo etário quinquenal)",
+      quintil_inc ~ "Estrato de renda (quintil)",
+      educ_atingida ~ "Escolaridade atingida",
+      inc_prop_individuo ~ "Parcela de contribuição na renda total do domicílio",
+      inc_prop_aposentado_dom ~ "Parcela de contribuição da aposentadoria na renda total do domicílio",
+      flag_aposentadoria ~ "Recebe aposentadoria",
+      tipo_dom ~ "Tipo de domicílio de residência",
+      status_rm ~ "Status do local de residência",
+      regiao ~ "Região geográfica de residência"),
+    include = c(flag_participa,cor_raca,sexo,grupo_etario,quintil_inc,educ_atingida,
+                inc_prop_individuo,inc_prop_aposentado_dom,flag_aposentadoria,tipo_dom,
+                status_rm,regiao),
+    missing_text = "Missing")

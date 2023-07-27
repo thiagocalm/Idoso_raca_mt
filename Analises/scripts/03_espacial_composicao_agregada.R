@@ -44,6 +44,13 @@ rm(pnad)
 # Total
 
 t_rm_total <- pnad_esp_idoso_plan |>
+  group_by(cor_raca, status_rm) |>
+  summarise(n = survey_total(),
+            prop = round(survey_mean(na.rm = TRUE)*100,2))
+
+# Participação no mercado de trabalho
+
+t_rm_participa <- pnad_esp_idoso_plan |>
   group_by(status_rm, cor_raca, flag_participa) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
@@ -51,42 +58,42 @@ t_rm_total <- pnad_esp_idoso_plan |>
 # Sexo
 
 t_rm_sexo <- pnad_esp_idoso_plan |>
-  group_by(status_rm, cor_raca, flag_participa, sexo) |>
+  group_by(status_rm, cor_raca, sexo) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
 
 # Escolaridade
 
 t_rm_escolaridade <- pnad_esp_idoso_plan |>
-  group_by(status_rm, cor_raca, flag_participa, educ_atingida) |>
+  group_by(status_rm, cor_raca, educ_atingida) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
 
 # Quintil de renda
 
 t_rm_renda <- pnad_esp_idoso_plan |>
-  group_by(status_rm, cor_raca, flag_participa, quintil_inc_esp) |>
+  group_by(status_rm, cor_raca, quintil_inc_esp) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
 
 # Tipo de domicilio
 
 t_rm_tipodom <- pnad_esp_idoso_plan |>
-  group_by(status_rm, cor_raca, flag_participa, tipo_dom) |>
+  group_by(status_rm, cor_raca, tipo_dom) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
 
 # Existencia de dependente
 
 t_rm_tem_dep <- pnad_esp_idoso_plan |>
-  group_by(status_rm, cor_raca, flag_participa, tem_crianca, tem_idoso_dependente) |>
+  group_by(status_rm, cor_raca, tem_crianca, tem_idoso_dependente) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
 
 # Status de Aposentadoria
 
 t_rm_aposentadoria <- pnad_esp_idoso_plan |>
-  group_by(status_rm, cor_raca,  flag_participa, flag_aposentadoria) |>
+  group_by(status_rm, cor_raca, flag_aposentadoria) |>
   summarise(n = survey_total(),
             prop = round(survey_mean(na.rm = TRUE)*100,2))
 
@@ -146,20 +153,30 @@ t_regiao_aposentadoria <- pnad_esp_idoso_plan |>
 # 1. Por condicao de residência
 
 t_rm_agregada <- t_rm_total |>
-  mutate(categoria = "Pop. total",
+  mutate(categoria = "População total",
          variaveis = "Total") |>
-  select(status_rm, cor_raca, flag_participa, categoria, variaveis, prop) |>
+  select(status_rm, cor_raca, categoria, variaveis, prop) |>
+  bind_rows(
+    t_rm_participa |>
+      mutate(flag_participa = as.factor(case_when(
+        flag_participa == "forca_trabalho" ~ "Participa",
+        TRUE ~ "Não participa"
+      ))) |>
+      mutate(categoria = "Participação laboral",
+             variaveis = flag_participa) |>
+      select(status_rm, cor_raca, categoria, variaveis, prop)
+  ) |>
   bind_rows(
     t_rm_sexo |>
       mutate(categoria = "Sexo",
              variaveis = sexo) |>
-      select(status_rm, cor_raca, flag_participa, categoria, variaveis, prop)
+      select(status_rm, cor_raca, categoria, variaveis, prop)
   ) |>
   bind_rows(
     t_rm_escolaridade |>
       mutate(categoria = "Escolaridade",
              variaveis = educ_atingida) |>
-      select(status_rm, cor_raca, flag_participa, categoria, variaveis, prop)
+      select(status_rm, cor_raca, categoria, variaveis, prop)
   ) |>
   bind_rows(
     t_rm_renda |>
@@ -170,7 +187,7 @@ t_rm_agregada <- t_rm_total |>
       mutate(categoria = "Dist. Renda",
              variaveis = quintil_inc_esp) |>
       filter(!is.na(variaveis)) |>
-      select(status_rm, cor_raca, flag_participa, categoria, variaveis, prop)
+      select(status_rm, cor_raca, categoria, variaveis, prop)
   ) |>
   bind_rows(
     t_rm_tipodom |>
@@ -182,7 +199,7 @@ t_rm_agregada <- t_rm_total |>
       mutate(categoria = "Tipo de domicílio",
              variaveis = tipo_dom) |>
       filter(!is.na(variaveis)) |>
-      select(status_rm, cor_raca, flag_participa, categoria, variaveis, prop)
+      select(status_rm, cor_raca, categoria, variaveis, prop)
   ) |>
   bind_rows(
     t_rm_tem_dep |>
@@ -193,27 +210,26 @@ t_rm_agregada <- t_rm_total |>
         tem_crianca == 0 & tem_idoso_dependente == 0 ~ "Nenhum"))) |>
       select(-c(tem_crianca, tem_idoso_dependente)) |>
       ungroup() |>
-      group_by(status_rm, cor_raca, flag_participa, tem_dependente) |>
+      group_by(status_rm, cor_raca, tem_dependente) |>
       summarise(n = n) |>
       summarise(status_rm = status_rm,
                 cor_raca = cor_raca,
-                flag_participa = flag_participa,
                 tem_dependente = tem_dependente,
                 n = n,
                 prop = round(n/sum(n)*100,2)) |>
       mutate(categoria = "Existência de dependente",
              variaveis = tem_dependente) |>
       filter(!is.na(variaveis)) |>
-      select(status_rm, cor_raca, flag_participa, categoria, variaveis, prop)
+      select(status_rm, cor_raca, categoria, variaveis, prop)
   ) |>
   bind_rows(
     t_rm_aposentadoria |>
       mutate(categoria = "Condição de aposentadoria",
              variaveis = flag_aposentadoria) |>
       filter(!is.na(variaveis)) |>
-      select(status_rm, cor_raca, flag_participa, categoria, variaveis, prop)
+      select(status_rm, cor_raca, categoria, variaveis, prop)
   ) |>
-  select(status_rm, categoria, cor_raca, flag_participa, variaveis, prop) |>
+  select(status_rm, categoria, cor_raca, variaveis, prop) |>
   arrange(categoria, cor_raca)
 
 # 2. Por região geográfica

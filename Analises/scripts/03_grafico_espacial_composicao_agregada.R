@@ -16,6 +16,16 @@ load("./Analises/outputs/pt2/descritiva_composicao_regiao.RData")
 
 # Grafico por RM -------------------------------------------------
 
+tabelona <- ftable(xtabs(prop ~ status_rm + categoria + cor_raca + variaveis,
+             t_rm_agregada),
+       col.vars = c("cor_raca", "status_rm"),
+       row.vars = c("categoria","variaveis")) |>
+  stats:::format.ftable(quote = FALSE, dec = ",") |>
+  trimws() |>
+  as.data.frame()
+
+clipr::write_clip(tabelona) # copiar tabela para colar no excel
+
 graf_rm <- t_rm_agregada |>
   mutate(prop_fct = case_when(
            prop <= 11 ~ "0-10",
