@@ -20,7 +20,7 @@ descritivas_taxa$t1 |>
   filter(cor_raca != "Outros") |>
   ggplot() +
   aes(x = ano, y = prop, linetype = cor_raca, color = flag_idoso) +
-  geom_point(size = 3) +
+  geom_point(size = 5) +
   geom_line(linewidth = 1.05) +
   geom_errorbar(aes(ymin=prop-prop_se*1.96, ymax=prop+prop_se*1.96), width=.1,
                 linetype = "solid") +
