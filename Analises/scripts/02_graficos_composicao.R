@@ -36,7 +36,7 @@ descritivas_composicao$t1 |>
                 linetype = "solid") +
   scale_color_viridis_d(option = "D",begin = .1, end = .6) +
   coord_cartesian(ylim = c(30,max(descritivas_composicao$t1$prop+10))) +
-  scale_x_continuous(breaks = seq(2012,2019,1)) +
+  scale_x_continuous(breaks = seq(2012,2023,1)) +
   scale_y_continuous(breaks = seq(0,max(descritivas_composicao$t1$prop+5),10)) +
   labs(
     title = "Distribuição relativa da população por cor ou raça e se é idoso ou não - Brasil 2012-2019",
@@ -67,7 +67,7 @@ descritivas_composicao$t1_by_sex |>
                 linetype = "solid") +
   scale_color_viridis_d(option = "D",begin = .1, end = .6) +
   coord_cartesian(ylim = c(30,max(descritivas_composicao$t1$prop+10))) +
-  scale_x_continuous(breaks = seq(2012,2019,1)) +
+  scale_x_continuous(breaks = seq(2012,2023,1)) +
   scale_y_continuous(breaks = seq(0,max(descritivas_composicao$t1$prop+5),10)) +
   lemon::facet_rep_grid(. ~ sexo, repeat.tick.labels = TRUE) +
   labs(
@@ -95,7 +95,7 @@ descritivas_composicao$t1_by_sex |>
 
 descritivas_composicao$t3 |>
   filter(grupo_etario <= 90) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = grupo_etario, y = prop, color = cor_raca, interaction(grupo_etario, grupo_etario)) +
@@ -166,7 +166,7 @@ descritivas_composicao$t3 |>
 
 descritivas_composicao$t3_by_sex |>
   filter(grupo_etario <= 90) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = grupo_etario, y = prop, color = cor_raca, interaction(grupo_etario, grupo_etario)) +
@@ -203,7 +203,7 @@ descritivas_composicao$t3_by_sex |>
 # Total
 
 descritivas_composicao$t5 |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = educ_atingida, y = prop, fill = cor_raca) +
@@ -236,7 +236,7 @@ descritivas_composicao$t5 |>
 # Por sexo
 
 descritivas_composicao$t5_by_sex |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = educ_atingida, y = prop, fill = cor_raca) +
@@ -276,7 +276,7 @@ descritivas_composicao$t6 |>
     quintil_inc,
     levels = c(1,2,3,4,5),
     labels = c("P20","P40","P60","P80","P100"))) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = quintil_inc, y = prop, fill = cor_raca) +
@@ -314,7 +314,7 @@ descritivas_composicao$t6_by_sex |>
     quintil_inc,
     levels = c(1,2,3,4,5),
     labels = c("P20","P40","P60","P80","P100"))) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = quintil_inc, y = prop, fill = cor_raca) +
@@ -354,7 +354,7 @@ descritivas_composicao$t7 |>
     tipo_dom == 2 ~ "Nuclear",
     tipo_dom == 3 ~ "Estendida",
     tipo_dom == 4 ~ "Composta"))) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tipo_dom, y = prop, fill = cor_raca) +
@@ -392,7 +392,7 @@ descritivas_composicao$t7_by_sex |>
     tipo_dom == 2 ~ "Nuclear",
     tipo_dom == 3 ~ "Estendida",
     tipo_dom == 4 ~ "Composta"))) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tipo_dom, y = prop, fill = cor_raca) +
@@ -441,7 +441,7 @@ descritivas_composicao$t8 |>
             n = n,
             prop = round(n/sum(n)*100,2),
             prop_se = prop_se) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   # filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tem_dependente, y = prop, fill = cor_raca) +
@@ -488,7 +488,7 @@ descritivas_composicao$t8_by_sex |>
             n = n,
             prop = round(n/sum(n)*100,2),
             prop_se = prop_se) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   # filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tem_dependente, y = prop, fill = cor_raca) +
@@ -556,7 +556,7 @@ descritivas_composicao$t10 |>
 # Por sexo
 
 descritivas_composicao$t10_by_sex |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = flag_aposentadoria, y = prop, fill = cor_raca) +
@@ -635,7 +635,7 @@ pnad_idoso |>
 # Por sexo
 
 pnad_idoso |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   mutate(
     inc_prop_individuo = case_when(is.na(inc_prop_individuo) ~ 0,
                                    TRUE ~ inc_prop_individuo),
@@ -679,7 +679,7 @@ pnad_idoso |>
 # Total
 
 pnad_idoso |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   mutate(
     inc_prop_individuo = case_when(is.na(inc_prop_individuo) ~ 0,
                                    TRUE ~ inc_prop_individuo),
@@ -720,7 +720,7 @@ pnad_idoso |>
 # Por sexo
 
 pnad_idoso |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   mutate(
     inc_prop_individuo = case_when(is.na(inc_prop_individuo) ~ 0,
                                    TRUE ~ inc_prop_individuo),
@@ -809,7 +809,7 @@ pnad_idoso |>
 # Por sexo
 
 pnad_idoso |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   mutate(
     inc_prop_individuo = case_when(is.na(inc_prop_individuo) ~ 0,
                                    TRUE ~ inc_prop_individuo),

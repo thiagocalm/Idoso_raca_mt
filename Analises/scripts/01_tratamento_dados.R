@@ -7,23 +7,14 @@ ifelse(!require(srvyr),install.packages("srvyr"),require(srvyr))
 ifelse(!require(survey),install.packages("survey"),require(survey))
 
 
-# Import data -------------------------------------------------------------
+# Tratamento dos dados ----------------------------------------------------
 
-pnad_2012 <- readRDS("./Analises/dados/pnadc_2012.rds")
-pnad_2013 <- readRDS("./Analises/dados/pnadc_2013.rds")
-pnad_2014 <- readRDS("./Analises/dados/pnadc_2014.rds")
-pnad_2015 <- readRDS("./Analises/dados/pnadc_2015.rds")
-pnad_2016 <- readRDS("./Analises/dados/pnadc_2016.rds")
-pnad_2017 <- readRDS("./Analises/dados/pnadc_2017.rds")
-pnad_2018 <- readRDS("./Analises/dados/pnadc_2018.rds")
-pnad_2019 <- readRDS("./Analises/dados/pnadc_2019.rds")
+## Por ano
+periodo <- 2012:2023
 
+for(i in seq_along(periodo)){
 
-# Manipulacao -------------------------------------------------------------
-
-## Por ano 2012-2019
-
-for(ano in 2012:2019){
+  ano <- periodo[i]
 
   # Progress
   print(paste0("Estamos no ano ", ano,"..."))
@@ -82,7 +73,7 @@ for(ano in 2012:2019){
       # Proporcao da renda na renda domiciliar
       inc_prop_individuo = case_when(is.na(VD4046) ~ 0, TRUE ~VD4046/VD5007))
 
-  # Status de aposentadoria - Para 2012 a 2014
+  # Status de aposentadoria - Para 2012 a 2015
   if(ano <= 2015){
     pnad <- pnad |>
       mutate(
@@ -127,31 +118,21 @@ for(ano in 2012:2019){
 
   saveRDS(pnad, dir_analise, compress = TRUE)
 
+  # criando base empilhada
+  if(i == 1){
+    pnad_pooled <- pnad
+  } else{
+    pnad_pooled <- pnad_pooled %>%
+      bind_rows(pnad)
+  }
+
+  # salvando base empilhada
+  if(i == length(periodo)){
+    saveRDS(pnad_pooled, "./Analises/dados/pnadc_analise.rds", compress = TRUE)
+    rm(pnad, pnad_pooled)
+    invisible(gc())
+  }
+
   # Progress
   print(paste0("Menos um! Ano ", ano," foi!!!!"))
 }
-
-
-# Juntando dados em um arquivo so -----------------------------------------
-
-pnad_2012 <- readRDS("./Analises/dados/pnadc_2012_analise.rds")
-pnad_2013 <- readRDS("./Analises/dados/pnadc_2013_analise.rds")
-pnad_2014 <- readRDS("./Analises/dados/pnadc_2014_analise.rds")
-pnad_2015 <- readRDS("./Analises/dados/pnadc_2015_analise.rds")
-pnad_2016 <- readRDS("./Analises/dados/pnadc_2016_analise.rds")
-pnad_2017 <- readRDS("./Analises/dados/pnadc_2017_analise.rds")
-pnad_2018 <- readRDS("./Analises/dados/pnadc_2018_analise.rds")
-pnad_2019 <- readRDS("./Analises/dados/pnadc_2019_analise.rds")
-
-pnad <- pnad_2012 |>
-  bind_rows(pnad_2013)|>
-  bind_rows(pnad_2014)|>
-  bind_rows(pnad_2015)|>
-  bind_rows(pnad_2016)|>
-  bind_rows(pnad_2017)|>
-  bind_rows(pnad_2018)|>
-  bind_rows(pnad_2019)
-
-# Salvando arquivo
-
-saveRDS(pnad, "./Analises/dados/pnadc_analise.rds", compress = TRUE)

@@ -20,13 +20,13 @@ descritivas_taxa$t1 |>
   filter(cor_raca != "Outros") |>
   ggplot() +
   aes(x = ano, y = prop, linetype = cor_raca, color = flag_idoso) +
-  geom_point(size = 5) +
+  geom_point(size = 3.5) +
   geom_line(linewidth = 1.05) +
   geom_errorbar(aes(ymin=prop-prop_se*1.96, ymax=prop+prop_se*1.96), width=.1,
                 linetype = "solid") +
   scale_color_viridis_d(option = "D",begin = .1, end = .6) +
   coord_cartesian(ylim = c(15,75)) +
-  scale_x_continuous(breaks = seq(2012,2019,1)) +
+  scale_x_continuous(breaks = seq(2012,2023,1)) +
   scale_y_continuous(breaks = seq(15,80,10)) +
   labs(
     # title = "Taxa Bruta de Participação no Mercado de Trabalho por cor ou raça e se é idoso ou não - Brasil 2012-2019",
@@ -57,9 +57,9 @@ descritivas_taxa$t1_by_sex |>
   geom_errorbar(aes(ymin=prop-prop_se*1.96, ymax=prop+prop_se*1.96), width=.1,
                 linetype = "solid") +
   scale_color_viridis_d(option = "D",begin = .1, end = .6) +
-  coord_cartesian(ylim = c(15,75)) +
-  scale_x_continuous(breaks = seq(2012,2019,1)) +
-  scale_y_continuous(breaks = seq(15,80,10)) +
+  coord_cartesian(ylim = c(0,75)) +
+  scale_x_continuous(breaks = seq(2012,2023,1)) +
+  scale_y_continuous(breaks = seq(0,80,10)) +
   lemon::facet_rep_grid(. ~ sexo, repeat.tick.labels = TRUE) +
   labs(
     title = "Taxa Bruta de Participação no Mercado de Trabalho por cor ou raça e se é idoso ou não, segundo o sexo - Brasil 2012-2019",
@@ -87,7 +87,7 @@ descritivas_taxa$t1_by_sex |>
 descritivas_taxa$t2 |>
   filter(flag_participa == "forca_trabalho") |>
   filter(grupo_etario <= 90) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = grupo_etario, y = prop, color = cor_raca, interaction(grupo_etario, grupo_etario)) +
@@ -161,7 +161,7 @@ descritivas_taxa$t2 |>
 descritivas_taxa$t2_by_sex |>
   filter(flag_participa == "forca_trabalho") |>
   filter(grupo_etario <= 90) |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = grupo_etario, y = prop, color = cor_raca, interaction(grupo_etario, grupo_etario)) +
@@ -199,7 +199,7 @@ descritivas_taxa$t2_by_sex |>
 
 descritivas_taxa$t3 |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   mutate(educ_atingida = factor(educ_atingida, levels = c("Sem instrução","Ensino Fundamental", "Ensino Médio",
                                                           "Ensino Superior"))) |>
@@ -235,8 +235,10 @@ descritivas_taxa$t3 |>
 
 descritivas_taxa$t3_by_sex |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
+  mutate(educ_atingida = factor(educ_atingida, levels = c("Sem instrução","Ensino Fundamental", "Ensino Médio",
+                                                          "Ensino Superior"))) |>
   ggplot() +
   aes(x = educ_atingida, y = prop, fill = cor_raca) +
   geom_col(position = position_dodge2(0.1)) +
@@ -279,7 +281,7 @@ descritivas_taxa$t4 |>
     quintil_inc == 5 ~ "P100"
   ))) |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = quintil_inc, y = prop, fill = cor_raca) +
@@ -321,7 +323,7 @@ descritivas_taxa$t4_by_sex |>
     quintil_inc == 5 ~ "P100"
   ))) |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = quintil_inc, y = prop, fill = cor_raca) +
@@ -362,7 +364,7 @@ descritivas_taxa$t5 |>
     tipo_dom == 3 ~ "Estendida",
     tipo_dom == 4 ~ "Composta"))) |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tipo_dom, y = prop, fill = cor_raca) +
@@ -401,7 +403,7 @@ descritivas_taxa$t5_by_sex |>
     tipo_dom == 3 ~ "Estendida",
     tipo_dom == 4 ~ "Composta"))) |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tipo_dom, y = prop, fill = cor_raca) +
@@ -442,7 +444,7 @@ descritivas_taxa$t6 |>
     tem_crianca == 1 & tem_idoso_dependente == 1 ~ "Criança e idoso",
     tem_crianca == 0 & tem_idoso_dependente == 0 ~ "Nenhum"))) |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   # filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tem_dependente, y = prop, fill = cor_raca) +
@@ -481,7 +483,7 @@ descritivas_taxa$t6_by_sex |>
     tem_crianca == 1 & tem_idoso_dependente == 1 ~ "Criança e idoso",
     tem_crianca == 0 & tem_idoso_dependente == 0 ~ "Nenhum"))) |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = tem_dependente, y = prop, fill = cor_raca) +
@@ -552,7 +554,7 @@ descritivas_taxa$t8 |>
 
 descritivas_taxa$t8_by_sex |>
   filter(flag_participa == "forca_trabalho") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019,2021,2023)) |>
   filter(cor_raca != "Total") |>
   ggplot() +
   aes(x = flag_aposentadoria, y = prop, fill = cor_raca) +

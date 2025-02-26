@@ -20,7 +20,7 @@ load("./Analises/outputs/pt1/descritivas_composicao_agregado_participa_mt.RData"
 
 graf_df <- t_agregada |>
   filter(flag_idoso != "Total") |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019, 2021, 2023)) |>
   mutate(ano = as.factor(ano),
          prop_fct = case_when(
            prop <= 11 ~ "0-10",
@@ -95,7 +95,7 @@ graf_df |>
   scale_fill_brewer(palette = "RdBu", direction = -1) +
   theme_minimal() +
   labs(
-    caption = "Obs.: Para cada cor ou raça, ano e grupo etário amplo (idoso ou não idoso), soma-se 100% em cada categoria \n (sexo, escolaridade, etc.).",
+    caption = "Obs.: Para cada cor ou raça, ano e grupo etário amplo (idoso ou não idoso), soma-se 100% em cada categoria \n (sexo, escolaridade etc.).",
     fill = "Prop (%)",
     y = "Características",
     x = "Ano calendário"
@@ -115,7 +115,7 @@ graf_df |>
 # Grafico para pop. idosa -------------------------------------------------
 
 graf_df_idoso <- t_agregada_participa |>
-  filter(ano %in% c(2012,2015,2019)) |>
+  filter(ano %in% c(2012,2015,2019, 2021, 2023)) |>
   mutate(ano = as.factor(ano),
          prop_fct = case_when(
            prop <= 11 ~ "0-10",
@@ -185,7 +185,7 @@ graf_df_idoso |>
   scale_fill_brewer(palette = "RdBu", direction = -1) +
   theme_minimal() +
   labs(
-    caption = "Obs.: Para cada cor ou raça, ano e condição na força de trabalho, soma-se 100% em cada categoria \n (sexo, escolaridade, etc.).",
+    caption = "Obs.: Para cada cor ou raça, ano e condição na força de trabalho, soma-se 100% em cada categoria \n (sexo, escolaridade etc.).",
     fill = "Prop (%)",
     y = "Características",
     x = "Ano calendário"

@@ -42,6 +42,14 @@ pnad_idoso <- pnad |>
                                    TRUE ~ inc_prop_individuo),
     inc_prop_aposentado_dom = case_when(is.na(inc_prop_aposentado_dom) ~ 0,
                                         TRUE ~ inc_prop_aposentado_dom),
+    inc_prop_individuo = factor(case_when(
+      inc_prop_individuo == 0 ~ 1,
+      inc_prop_individuo < .5 ~ 2,
+      inc_prop_individuo > .5 ~ 3), levels = c(1,2,3), labels = c("Zero","Alguma","Maior")),
+    inc_prop_aposentado_dom = factor(case_when(
+      inc_prop_aposentado_dom == 0 ~ 1,
+      inc_prop_aposentado_dom < .5 ~ 2,
+      inc_prop_aposentado_dom > .5 ~ 3),levels = c(1,2,3), labels = c("Zero","Alguma","Maior")),
     anofct = as.factor(ano),
     grupo_etario = as.factor(grupo_etario),
     cor_raca = as.factor(cor_raca),
@@ -75,7 +83,7 @@ reg_mod1_s_dom <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quint
 
 anova(reg_mod1, reg_mod1_s_dom)
 
-# Modelo 2 - Geral com interacao ------------------------------------------
+# Modelo 2 - Negros ------------------------------------------
 
 
 reg_mod2 <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
@@ -85,14 +93,14 @@ reg_mod2 <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_ati
 
 summary_mod2 <- summary(reg_mod2)
 
-reg_mod1_s_dom <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
+reg_mod2_s_dom <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
                            inc_prop_individuo + inc_prop_aposentado_dom + flag_aposentadoria +
                            status_rm + regiao + anofct,
                          design = pnad_idoso |> filter(cor_raca == "Negro"), family = binomial())
 
-anova(reg_mod2, reg_mod1_s_dom)
+anova(reg_mod2, reg_mod2_s_dom)
 
-# Modelo 3 - Urbano --------------------------------------------------------
+# Modelo 3 - Brancos --------------------------------------------------------
 
 reg_mod3 <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
                      inc_prop_individuo + inc_prop_aposentado_dom + flag_aposentadoria + tipo_dom +
@@ -101,12 +109,12 @@ reg_mod3 <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_ati
 
 summary_mod3 <- summary(reg_mod3)
 
-reg_mod1_s_dom <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
+reg_mod3_s_dom <- svyglm(flag_participa ~ sexo + grupo_etario + quintil_inc + educ_atingida +
                            inc_prop_individuo + inc_prop_aposentado_dom + tipo_dom +
                            status_rm + regiao + anofct,
                          design = pnad_idoso |> filter(cor_raca == "Branco"), family = binomial())
 
-anova(reg_mod3, reg_mod1_s_dom)
+anova(reg_mod3, reg_mod2_s_dom)
 
 # Sintese -----------------------------------------------------------------
 
@@ -114,8 +122,8 @@ anova(reg_mod3, reg_mod1_s_dom)
 # Pseudo R2 (McFadden)
 
 1 - reg_mod1$deviance / reg_mod1$null.deviance # mod geral
-1 - reg_mod2$deviance / reg_mod2$null.deviance # mod urbano
-1 - reg_mod3$deviance / reg_mod3$null.deviance # mod rural
+1 - reg_mod2$deviance / reg_mod2$null.deviance # mod negros
+1 - reg_mod3$deviance / reg_mod3$null.deviance # mod brancos
 
 # AIC analysis
 
@@ -126,8 +134,8 @@ reg_mod3$aic #AIC MOD rural
 # VIF test
 
 car::vif(reg_mod1) #VIF mod geral
-car::vif(reg_mod2) #VIF mod urbano
-car::vif(reg_mod3) #VIF mod rural
+car::vif(reg_mod2) #VIF mod negros
+car::vif(reg_mod3) #VIF mod brancos
 
 resultados <- summary_mod1$coefficients[,c(1:4)] |>
   as_tibble() |>
@@ -166,37 +174,7 @@ openxlsx::write.xlsx(resultados, file = "./Analises/outputs/pt3/tabela_sintese_r
 
 # Analise dos resultados --------------------------------------------------
 
-sjPlot::plot_model(reg_mod2, type = "int", terms = c( "anofct", "cor_raca"), show.values = TRUE,
-                   value.offset = .4)
-
-reg_2_summary <- summary(reg_mod2)
-
-exp(reg_2_summary$coefficients[,1])
-
-predict_values <- predict(reg_mod2, pnad_idoso,type="response") |> as_tibble()
-
-pnad_idoso |>
-  mutate(prob_predita = predict_values$response) |>
-  group_by(cor_raca, educ_atingida) |>
-  summarise(prob = survey_mean(prob_predita, na.rm = TRUE)) |>
-  ggplot() +
-  aes(x = as.factor(educ_atingida), y = prob, linetype = cor_raca, group = cor_raca) +
-  geom_line()
-
-
-resumo_mod <- stargazer::stargazer(
-  reg_mod1, reg_mod2, reg_mod3,
-  type = "text",
-  title = "Tabela síntese das estimativas do modelo de regressão",
-  column.labels = c("Brasil","Pop. Negra","Pop. Branca"),
-  dep.var.caption = c("Variável dependente:"),
-  dep.var.labels = c("Se participa do mercado de trabalho"),
-  decimal.mark = ",",
-  digit.separator = ".",
-  intercept.top = TRUE,
-  intercept.bottom = FALSE
-)
-
+sjPlot::plot_models(reg_mod2, reg_mod3,vline.color = "grey") + theme_minimal()
 
 # Tabela resumo das variaveis utilizadas ----------------------------------
 
