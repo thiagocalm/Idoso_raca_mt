@@ -120,19 +120,32 @@ ame_mod3 <- margins(
 
 summary(ame_mod3)
 
+# Exportando
 
-# Grafico dos efeitos -----------------------------------------------------
-
-tabela <- summary(ame_mod2) %>%
+tabela <-  summary(ame_mod2) %>%
   as_tibble() %>%
-  select(factor, AME, lower, upper) %>%
-  mutate(modelo = "Negros") %>%
+  mutate(modelo = "Negros")%>%
   bind_rows(
     summary(ame_mod3) %>%
       as_tibble() %>%
-      select(factor, AME, lower, upper) %>%
       mutate(modelo = "Brancos")
+  ) %>%
+  bind_rows(
+    summary(ame_mod1) %>%
+      as_tibble() %>%
+      mutate(modelo = "Completo")
   )
+
+saveRDS(tabela,"Analises/outputs/pt3/ame_tabela.RDS")
+
+# Grafico dos efeitos -----------------------------------------------------
+
+tabela <- readRDS("Analises/outputs/pt3/ame_tabela.RDS") %>%
+  as_tibble() %>%
+  select(factor, AME, lower, upper, modelo) %>%
+  filter(modelo != "Completo")
+
+# Grafico
 
 tabela %>%
   ggplot() +
