@@ -95,13 +95,49 @@ rm(pnad_idoso)
 
 # Modelo 1
 
-ame_mod1 <- margins(reg_mod1, design = pnad_idoso)
+ame_mod1 <- margins(
+  reg_mod1#,
+  # design = pnad_idoso
+)
+
+summary(ame_mod1)
 
 # Modelo 2
 
-ame_mod2 <- margins(reg_mod2, design = pnad_idoso |> filter(cor_raca == "Negro"))
+ame_mod2 <- margins(
+  reg_mod2#,
+  # design = pnad_idoso |> filter(cor_raca == "Negro")
+)
+
+summary(ame_mod2)
 
 # Modelo 3
 
-ame_mod3 <- margins(reg_mod3, data = pnad |> filter(cor_raca == "Branco"))
+ame_mod3 <- margins(
+  reg_mod3#,
+  # design = pnad_idoso |> filter(cor_raca == "Branco")
+)
 
+summary(ame_mod3)
+
+
+# Grafico dos efeitos -----------------------------------------------------
+
+tabela <- summary(ame_mod2) %>%
+  as_tibble() %>%
+  select(factor, AME, lower, upper) %>%
+  mutate(modelo = "Negros") %>%
+  bind_rows(
+    summary(ame_mod3) %>%
+      as_tibble() %>%
+      select(factor, AME, lower, upper) %>%
+      mutate(modelo = "Brancos")
+  )
+
+tabela %>%
+  ggplot() +
+  aes(color = modelo) +
+  geom_segment(aes(x = lower, xend = upper, y = rev(factor), yend = rev(factor)), linewidth = 1.02) +
+  geom_point(aes(x = AME, y = rev(factor)), size = 2) +
+  geom_vline(xintercept = 0, color = "grey50", linewidth = 1.05, linetype = "dashed") +
+  theme_light()
