@@ -10,6 +10,7 @@ ifelse(!require(car),install.packages("car"),require(car))
 ifelse(!require(DescTools),install.packages("DescTools"),require(DescTools))
 ifelse(!require(openxlsx),install.packages("openxlsx"),require(openxlsx))
 ifelse(!require(gtsummary),install.packages("gtsummary"),require(gtsummary))
+ifelse(!require(sjPlot),install.packages("sjPlot"),require(sjPlot))
 
 # Importacao dos dados ----------------------------------------------------
 
@@ -77,9 +78,11 @@ reg_mod1 <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc
 summary_mod1 <- summary(reg_mod1)
 
 reg_mod1_s_dom <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc + educ_atingida +
-                     inc_prop_individuo + inc_prop_aposentado_dom + tipo_dom +
+                     inc_prop_individuo + inc_prop_aposentado_dom + flag_aposentadoria +
                      status_rm + regiao + anofct,
                    design = pnad_idoso, family = binomial())
+
+
 
 anova(reg_mod1, reg_mod1_s_dom)
 
