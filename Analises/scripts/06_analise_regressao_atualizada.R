@@ -1,8 +1,7 @@
 
 ## Commentarios
 # Este script atualiza as analises realizadas no paper Almeida(2023), com um aprofundamento na modelagem
-# Proximo passo: restringir modelo somente para 2012-2019 e ver se o efeito permanece o mesmo anterior ou se muda
-#                muito... caso mude muito, conversar com Victor e Danilo e talvez Leo sobre isso.
+# Proximo passo: (i) testar significancia para interacao com sexo; (ii) analises de consistencia dos modelos
 
 options(scipen = 99999)
 
@@ -88,12 +87,8 @@ reg_mod1_s_dom <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quint
                            status_rm + regiao + anofct,
                          design = pnad_idoso, family = binomial())
 
-# reg_mod1_interaction <- svyglm(flag_participa ~ I(cor_raca * sexo) + I(cor_raca * grupo_etario) +
-#                                  I(cor_raca * quintil_inc) + I(cor_raca * educ_atingida) +
-#                                  I(cor_raca * inc_prop_individuo) + I(cor_raca * inc_prop_aposentado_dom) +
-#                                  I(cor_raca * flag_aposentadoria) + I(cor_raca * status_rm) +
-#                                  I(cor_raca * regiao) + I(cor_raca * anofct),
-#                          design = pnad_idoso, family = binomial())
+
+# Modelo 2 - interacao ----------------------------------------------------
 
 reg_mod1_interaction <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
                                  quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
@@ -102,11 +97,15 @@ reg_mod1_interaction <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario +
                                  status_rm + cor_raca * status_rm + regiao + cor_raca * regiao + anofct + cor_raca * anofct,
                                design = pnad_idoso, family = binomial())
 
-anova(reg_mod1_s_dom, reg_mod1_interaction)
-
 summary_mod1_int <- summary(reg_mod1_interaction)
 
-## Plots
+
+# Comparacao --------------------------------------------------------------
+
+anova(reg_mod1_s_dom, reg_mod1_interaction)
+
+
+# Plots modelo interativo -------------------------------------------------
 
 # By race
 plot_model(reg_mod1_interaction,
@@ -203,3 +202,40 @@ plot_model(reg_mod1_interaction,
            title = "",
            axis.title = c(""),
            legend.title = "Raça ou cor")
+
+
+# Validacao com modelos anteriores ----------------------------------------
+
+# Restricao dos dados para 2012-2019 para ver se efeito continua o mesmo...
+
+pnad_idoso_2 <- pnad_idoso %>%
+  filter(anofct %in% 2012:2019)
+
+# Modelo total
+
+reg_modval <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc + educ_atingida +
+                           inc_prop_individuo + inc_prop_aposentado_dom + flag_aposentadoria +
+                           status_rm + regiao + anofct,
+                         design = pnad_idoso_2, family = binomial())
+
+# Modelo total
+
+reg_modval_int <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
+                           quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
+                           inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
+                           cor_raca * inc_prop_aposentado_dom + flag_aposentadoria + cor_raca * flag_aposentadoria +
+                           status_rm + cor_raca * status_rm + regiao + cor_raca * regiao + anofct + cor_raca * anofct,
+                         design = pnad_idoso_2, family = binomial())
+
+summary(reg_modval)
+summary(reg_modval_int)
+
+exp(coefficients(reg_modval))
+exp(coefficients(reg_modval_int))
+
+# Conclusoes - quando incluimos dados de 2012 a 2023 há um aumento do diferencial (de 16% para 56% Odds ratio)
+
+
+# Analise de consistencia dos modelos -------------------------------------
+
+#...
