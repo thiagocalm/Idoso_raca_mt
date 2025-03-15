@@ -1,6 +1,8 @@
 
 ## Commentarios
 # Este script atualiza as analises realizadas no paper Almeida(2023), com um aprofundamento na modelagem
+# Proximo passo: restringir modelo somente para 2012-2019 e ver se o efeito permanece o mesmo anterior ou se muda
+#                muito... caso mude muito, conversar com Victor e Danilo e talvez Leo sobre isso.
 
 options(scipen = 99999)
 
