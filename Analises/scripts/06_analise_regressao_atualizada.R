@@ -286,6 +286,14 @@ plot_model(reg_mod1_interacao_adj,
            axis.title = c(""),
            legend.title = "Raça ou cor")
 
+# By sex
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("sexo [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
+
 # By age group
 plot_model(reg_mod1_interacao_adj,
            type = "eff",
