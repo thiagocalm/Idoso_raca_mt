@@ -203,104 +203,158 @@ reg_modval_int <- svyglm(
 
  # Analise de consistencia dos modelos -------------------------------------
 
-#...
 
+ 1 - reg_mod1$deviance / reg_mod1$null.deviance # mod sem interacao
+ 1 - reg_mod1_interacao$deviance / reg_mod1_interacao$null.deviance # mod interacao
+
+ # AIC analysis
+
+ reg_mod1$aic #AIC MOD geral
+ reg_mod1_interacao$aic #AIC MOD interacao
+
+ # VIF test
+
+ car::vif(reg_mod1) #VIF mod geral
+ car::vif(reg_mod1_interacao) #VIF mod interacao
+
+ # Conclusoes #
+ # Consideracao 1: modelo interativo tem, por definicao, correlacao entre termos interativos. Logo,
+ #                 nao se deve ater ao que esta descrito la. Vamos focar no modelo sem interacao.
+ # Consideracao 2: modelo nao interativo tem uma alta correlacao entre variavel "flag_aposentadoria"
+ #                 e "inc_prop_aposentado_dom". Isso se deve, por definicao, ao fato de que "inc_..."
+ #                 contem a informacao de "flag_...". Vamos optar por somente utilizar "inc_...".
+
+
+
+# Ajuste dos modelos com base em avaliacoes -------------------
+
+ # Novo modelo - sem interacao
+reg_mod1_adj <- svyglm(
+  flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc + educ_atingida +
+    inc_prop_individuo + inc_prop_aposentado_dom + tipo_dom +
+    status_rm + regiao + anofct,
+  design = pnad_idoso,
+  family = binomial()
+)
+
+summary_mod1_adj <- summary(reg_mod1_adj)
+
+ # Novo modelo - com interacao
+reg_mod1_interacao_adj <- svyglm(
+   flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
+     quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
+     inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
+     cor_raca * inc_prop_aposentado_dom +
+     status_rm + cor_raca * status_rm + regiao + cor_raca * regiao +
+     tipo_dom + tipo_dom * cor_raca + anofct + cor_raca * anofct,
+   design = pnad_idoso,
+   family = binomial()
+ )
+
+summary_mod1_int_adj <- summary(reg_mod1_interacao_adj)
+
+ # avaliacao para multicolinearidade
+car::vif(reg_mod1_adj) #VIF mod geral
+car::vif(reg_mod1_interacao_adj) #VIF mod interacao
+
+# avaliacao para especificacao do modelo
+anova(reg_mod1,reg_mod1_adj)
+anova(reg_mod1_interacao,reg_mod1_interacao_adj)
+
+# visualizando diferenca dos efeitos
+summary_mod1
+summary_mod1_adj
+
+stargazer::stargazer(reg_mod1,reg_mod1_adj,type = "text")
+
+# Conclusao #
+# De fato, tanto via teste de especificacao do modelo quanto via analise de
+# multicolinearidade, podemos observar a correlacao entre ambas  variaveis.
+# Desse modo, vamos optar por ficar com o modelo sem "flag_aposentadoria".
 
  # Plots modelo interativo -------------------------------------------------
 
- # By race
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# Comparacao dos modelos
 
- # By sex
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("sexo [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+stargazer::stargazer(reg_mod1_adj,reg_mod1_interacao_adj,type = "text")
 
- # By age group
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("grupo_etario [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By race
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By income quarter
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("quintil_inc [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By age group
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("grupo_etario [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By education
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("educ_atingida [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By income quarter
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("quintil_inc [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By share of income in the household
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("inc_prop_individuo [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By education
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("educ_atingida [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By share of retirement income in the household
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("inc_prop_aposentado_dom [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By share of income in the household
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("inc_prop_individuo [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By retirement status
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("flag_aposentadoria [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By share of retirement income in the household
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("inc_prop_aposentado_dom [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By metropolitan region status
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("status_rm [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By metropolitan region status
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("status_rm [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By region status
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("regiao [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By region status
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("regiao [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By year status
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("anofct [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By year status
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("anofct [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
- # By household type
- plot_model(reg_mod1_interacao,
-            type = "eff",
-            terms = c("tipo_dom [all]", "cor_raca"),
-            title = "",
-            axis.title = c(""),
-            legend.title = "Raça ou cor")
+# By household type
+plot_model(reg_mod1_interacao_adj,
+           type = "eff",
+           terms = c("tipo_dom [all]", "cor_raca"),
+           title = "",
+           axis.title = c(""),
+           legend.title = "Raça ou cor")
 
