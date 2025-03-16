@@ -4,6 +4,7 @@
 # Proximo passo: (i) testar significancia para interacao com sexo; (ii) analises de consistencia dos modelos
 
 options(scipen = 99999)
+rm(list = ls())
 
 # Bibliotecas -------------------------------------------------------------
 
@@ -87,122 +88,36 @@ reg_mod1_s_dom <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quint
                            status_rm + regiao + anofct,
                          design = pnad_idoso, family = binomial())
 
+anova(reg_mod1, reg_mod1_s_dom)
+
+# Conclusao: #
+# Vamos optar pelo modelo com domicilio, uma vez que segundo a analise de especificacao do modelo,
+# sua retirada teria uma diferença estatisticamente significativa
+
+rm(reg_mod1_s_dom)
 
 # Modelo 2 - interacao ----------------------------------------------------
 
-reg_mod1_interaction <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
-                                 quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
-                                 inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
-                                 cor_raca * inc_prop_aposentado_dom + flag_aposentadoria + cor_raca * flag_aposentadoria +
-                                 status_rm + cor_raca * status_rm + regiao + cor_raca * regiao + anofct + cor_raca * anofct,
-                               design = pnad_idoso, family = binomial())
+reg_mod1_interacao <- svyglm(
+  flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
+    quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
+    inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
+    cor_raca * inc_prop_aposentado_dom + flag_aposentadoria + cor_raca * flag_aposentadoria +
+    status_rm + cor_raca * status_rm + regiao + cor_raca * regiao +
+    tipo_dom + tipo_dom * cor_raca + anofct + cor_raca * anofct,
+  design = pnad_idoso,
+  family = binomial()
+)
 
-summary_mod1_int <- summary(reg_mod1_interaction)
-
+summary_mod1_int <- summary(reg_mod1_interacao)
 
 # Comparacao --------------------------------------------------------------
 
-anova(reg_mod1_s_dom, reg_mod1_interaction)
+anova(reg_mod1, reg_mod1_interacao)
 
-
-# Plots modelo interativo -------------------------------------------------
-
-# By race
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By sex
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("sexo [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By age group
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("grupo_etario [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By income quarter
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("quintil_inc [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By education
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("educ_atingida [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By share of income in the household
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("inc_prop_individuo [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By share of retirement income in the household
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("inc_prop_aposentado_dom [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By retirement status
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("flag_aposentadoria [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By metropolitan region status
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("status_rm [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By region status
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("regiao [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By year status
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("anofct [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
-# By year status
-plot_model(reg_mod1_interaction,
-           type = "eff",
-           terms = c("anofct [all]", "cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
-
+# Conclusao: #
+# Vamos optar pelo modelo com interacao, uma vez que a analise de especificacao do modelo se mostrou
+# significativo.
 
 # Validacao com modelos anteriores ----------------------------------------
 
@@ -213,29 +128,179 @@ pnad_idoso_2 <- pnad_idoso %>%
 
 # Modelo total
 
-reg_modval <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc + educ_atingida +
-                           inc_prop_individuo + inc_prop_aposentado_dom + flag_aposentadoria +
-                           status_rm + regiao + anofct,
-                         design = pnad_idoso_2, family = binomial())
+reg_modval <- svyglm(
+  flag_participa ~ cor_raca + sexo + grupo_etario + quintil_inc + educ_atingida +
+    inc_prop_individuo + inc_prop_aposentado_dom + flag_aposentadoria +
+    status_rm + regiao + tipo_dom + anofct,
+  design = pnad_idoso_2,
+  family = binomial()
+)
 
 # Modelo total
 
-reg_modval_int <- svyglm(flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
-                           quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
-                           inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
-                           cor_raca * inc_prop_aposentado_dom + flag_aposentadoria + cor_raca * flag_aposentadoria +
-                           status_rm + cor_raca * status_rm + regiao + cor_raca * regiao + anofct + cor_raca * anofct,
-                         design = pnad_idoso_2, family = binomial())
+reg_modval_int <- svyglm(
+  flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
+    quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
+    inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
+    cor_raca * inc_prop_aposentado_dom + flag_aposentadoria + cor_raca * flag_aposentadoria +
+    status_rm + cor_raca * status_rm + regiao + cor_raca * regiao +
+    tipo_dom + tipo_dom * cor_raca + anofct + cor_raca * anofct,
+  design = pnad_idoso_2,
+  family = binomial()
+)
 
 summary(reg_modval)
 summary(reg_modval_int)
 
 exp(coefficients(reg_modval))
 exp(coefficients(reg_modval_int))
+exp(coefficients(reg_mod1))
+exp(coefficients(reg_mod1_interacao))
 
-# Conclusoes - quando incluimos dados de 2012 a 2023 há um aumento do diferencial (de 16% para 56% Odds ratio)
+# Conclusoes #
+# O mesmo padrao observado em 2012-2019 é tambem observado em 2012-2023. Ou seja, a ampliacao da serie nao
+# afetou a mudanca de comportamento observado, e sim  a modelagem dos dados.
+# Quando incluimos dados de 2019 a 2023 há duas distintas mudancas:
+# 1 - para o modelo sem interacao: uma ligeira reducao aumento do diferencial (de 12,9% para 11,5% Odds ratio)
+# 2 - para o modelo com interacao: um aumento significativo no diferencial (de 68,2% para 93,7% odds ratio)
 
 
-# Analise de consistencia dos modelos -------------------------------------
+rm(pnad_idoso_2,reg_modval_int, reg_modval)
+
+# Teste - especificacao do modelo -----------------------------------------
+
+## Interacao para sexo
+
+reg_modval_int_csex <- svyglm(
+  flag_participa ~ cor_raca + sexo + cor_raca * sexo + grupo_etario +cor_raca * grupo_etario +
+    quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
+    inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
+    cor_raca * inc_prop_aposentado_dom + flag_aposentadoria + cor_raca * flag_aposentadoria +
+    status_rm + cor_raca * status_rm + regiao + cor_raca * regiao +
+    tipo_dom + tipo_dom * cor_raca + anofct + cor_raca * anofct,
+  design = pnad_idoso,
+  family = binomial()
+)
+
+reg_modval_int <- svyglm(
+  flag_participa ~ cor_raca + sexo + grupo_etario +cor_raca * grupo_etario +
+    quintil_inc + cor_raca * quintil_inc + educ_atingida + cor_raca * educ_atingida +
+    inc_prop_individuo + cor_raca * inc_prop_individuo + inc_prop_aposentado_dom +
+    cor_raca * inc_prop_aposentado_dom + flag_aposentadoria + cor_raca * flag_aposentadoria +
+    status_rm + cor_raca * status_rm + regiao + cor_raca * regiao +
+    tipo_dom + tipo_dom * cor_raca + anofct + cor_raca * anofct,
+  design = pnad_idoso,
+  family = binomial()
+)
+
+ anova(reg_modval_int_csex,reg_modval_int) # avaliacao - teste F para restricao do modelo "cor_raca * sexo"
+
+ # Conclusao: #
+ # Vamos optar pelo modelo sem interacao entre raca e sexo. A diferença principal observada se encontra no
+ # diferencial por sexo, não tendo diferença interativa entre raça e sexo (i.e. entre homens e mulheres negros)
+
+ rm(reg_modval_int_csex, reg_modval_int)
+
+ # Analise de consistencia dos modelos -------------------------------------
 
 #...
+
+
+ # Plots modelo interativo -------------------------------------------------
+
+ # By race
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By sex
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("sexo [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By age group
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("grupo_etario [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By income quarter
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("quintil_inc [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By education
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("educ_atingida [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By share of income in the household
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("inc_prop_individuo [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By share of retirement income in the household
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("inc_prop_aposentado_dom [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By retirement status
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("flag_aposentadoria [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By metropolitan region status
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("status_rm [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By region status
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("regiao [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By year status
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("anofct [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
+ # By household type
+ plot_model(reg_mod1_interacao,
+            type = "eff",
+            terms = c("tipo_dom [all]", "cor_raca"),
+            title = "",
+            axis.title = c(""),
+            legend.title = "Raça ou cor")
+
