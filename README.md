@@ -3,7 +3,7 @@
 
 **Título:** Fatores associados à participação dos idosos por cor ou raça no mercado de trabalho brasileiro
 
-Artigo publicado no âmbito do Desafio Longeviver 2023: (Clique aqui para acessar)[https://cebrap.org.br/wp-content/uploads/2023/11/Desafio-Longeviver-2023.pdf].
+Artigo publicado no âmbito do Desafio Longeviver 2023: [Clique aqui para acessar](https://cebrap.org.br/wp-content/uploads/2023/11/Desafio-Longeviver-2023.pdf).
 
 *Paper published in Portuguese without translation. This Readme file is also in portuguese*
 
@@ -281,6 +281,6 @@ Diferentemente da abordagem metodológica utilizada no artigo de 2023, o modelo 
 
 ## Materiais de referência
 
-- Análises do artigo para os modelos foram realizadas no script (04_exploratoria_reg.R)[https://github.com/thiagocalm/Idoso_raca_mt/raw/refs/heads/master/Analises/scripts/04_exploratoria_reg.R].
+- Análises do artigo para os modelos foram realizadas no script [04_exploratoria_reg.R](https://github.com/thiagocalm/Idoso_raca_mt/raw/refs/heads/master/Analises/scripts/04_exploratoria_reg.R).
 
-- Análises do novo modelo e seus testes de validação e avaliação de consistência podem ser encontrados no script (06_analise_regressao_atualizada.R)[https://github.com/thiagocalm/Idoso_raca_mt/raw/refs/heads/master/Analises/scripts/06_analise_regressao_atualizada.R]
+- Análises do novo modelo e seus testes de validação e avaliação de consistência podem ser encontrados no script [06_analise_regressao_atualizada.R](https://github.com/thiagocalm/Idoso_raca_mt/raw/refs/heads/master/Analises/scripts/06_analise_regressao_atualizada.R).
