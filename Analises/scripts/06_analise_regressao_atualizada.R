@@ -1,7 +1,6 @@
 
 ## Commentarios
-# Este script atualiza as analises realizadas no paper Almeida(2023), com um aprofundamento na modelagem
-# Proximo passo: (i) testar significancia para interacao com sexo; (ii) analises de consistencia dos modelos
+# Este script atualiza as analises realizadas no paper Almeida (2023), com um aprofundamento na modelagem
 
 options(scipen = 99999)
 rm(list = ls())
@@ -276,93 +275,127 @@ stargazer::stargazer(reg_mod1,reg_mod1_adj,type = "text")
 
 # Comparacao dos modelos
 
-stargazer::stargazer(reg_mod1_adj,reg_mod1_interacao_adj,type = "text")
+output_table <- stargazer::stargazer(
+  reg_mod1_adj,reg_mod1_interacao_adj,
+  # type = "text",
+  title = "Coeficientes dos modelos sem interação (1) e com interação (2)",
+  style = "demography",
+  dep.var.labels = "Participa ou não no mercado de trabalho",
+  ci = TRUE, se = NULL
+)
 
 # By race
-plot_model(reg_mod1_interacao_adj,
-           type = "eff",
-           terms = c("cor_raca"),
-           title = "",
-           axis.title = c(""),
-           legend.title = "Raça ou cor")
 
-# By sex
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
-           terms = c("sexo [all]", "cor_raca"),
-           title = "",
+           type = "pred",
+           terms = c("cor_raca"),
+           title = "Average Marginal Effect (AME) - Raça",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By age group
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("grupo_etario [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e grupo etário",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_idade.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By income quarter
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("quintil_inc [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e quintil de renda",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_rendaquintis.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By education
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("educ_atingida [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e educação",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_escolaridade.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By share of income in the household
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("inc_prop_individuo [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e\nproporção da renda individual na renda domiciliar",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_prop_inc_ind.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By share of retirement income in the household
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("inc_prop_aposentado_dom [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e\nProporção da renda de aposentadoria na renda domicliar",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_prop_inc_aposent.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By metropolitan region status
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("status_rm [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e localizacao da residencia",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_rm.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By region status
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("regiao [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e região geográfica de residência",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_regiao.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By year status
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("anofct [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e ano",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_raca_periodo.png",dpi = 300,width = 12*2, height = 9*2)
 
 # By household type
 plot_model(reg_mod1_interacao_adj,
-           type = "eff",
+           type = "pred",
            terms = c("tipo_dom [all]", "cor_raca"),
-           title = "",
+           title = "Average Marginal Effect (AME) - Raça e tipo de domicílio",
            axis.title = c(""),
-           legend.title = "Raça ou cor")
+           legend.title = "Raça ou cor") +
+  theme_sjplot()
+
+save_plot("./Analises/outputs/pt4/ame_tipodomicilio.png",dpi = 300,width = 12*2, height = 9*2)
+
+# Exportacao de tabela de output ------------------------------------------
+
+write(output_table, file = "./Analises/outputs/pt4/comparacao_modelos_latex.txt")
 
