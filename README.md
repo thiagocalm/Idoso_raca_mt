@@ -3,11 +3,13 @@
 
 **Título:** Fatores associados à participação dos idosos por cor ou raça no mercado de trabalho brasileiro
 
-Artigo publicado no âmbito do Desafio Longeviver 2023: [Clique aqui para acessar](https://cebrap.org.br/wp-content/uploads/2023/11/Desafio-Longeviver-2023.pdf).
+Publicações:
 
-Uma versão sintética do artigo com as atualizações metodológicas foram publicadas no Nexo PP: [Clique aqui para acessar](https://pp.nexojornal.com.br/opiniao/2025/04/16/participacao-de-pessoas-idosas-no-mercado-de-trabalho-ha-desigualdades-entre-negros-e-brancos-2).
+- **2023:** Artigo publicado no âmbito do Desafio Longeviver 2023: [Clique aqui para acessar](https://cebrap.org.br/wp-content/uploads/2023/11/Desafio-Longeviver-2023.pdf).
 
-*Paper published in Portuguese without translation. This Readme file is also in portuguese*
+- **2025:** Uma versão sintética do artigo com as atualizações metodológicas foram publicadas no Nexo PP: [Clique aqui para acessar](https://pp.nexojornal.com.br/opiniao/2025/04/16/participacao-de-pessoas-idosas-no-mercado-de-trabalho-ha-desigualdades-entre-negros-e-brancos-2).
+
+*Paper published in Portuguese without translation. This Readme file is also in portuguese.*
 
 ## Dados
 
